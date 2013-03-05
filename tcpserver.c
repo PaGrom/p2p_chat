@@ -68,7 +68,7 @@ int main()
 	serveraddr.sin_port = htons(SERVPORT);
 	serveraddr.sin_addr.s_addr = htonl(INADDR_ANY);
 	printf("%d\n", htonl(INADDR_ANY));
-	// printf("Using %s, listening at %d\n", inet_ntoa(serveraddr.sin_addr), SERVPORT);
+	printf("Using %d, listening at %d\n", inet_ntoa(serveraddr.sin_addr), SERVPORT);
 	 
 	/* After the socket descriptor is created, a bind() */
 	/* function gets a unique name for the socket. */
@@ -122,7 +122,7 @@ int main()
 	 
 	/*client IP*/
 	printf("Server-new socket, sd2 is OK...\n");
-	printf("Got connection from the f***ing client: %s\n", inet_ntoa(their_addr.sin_addr));
+	printf("Got connection from the f***ing client: %d\n", inet_ntoa(their_addr.sin_addr));
 	 
 	/* The select() function allows the process to */
 	/* wait for an event to occur and to wake up */
