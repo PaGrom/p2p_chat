@@ -42,6 +42,8 @@ public:
 	Client();
 	~Client();
 
+	void create_socket();
+
 	string get_server();
 };
 
