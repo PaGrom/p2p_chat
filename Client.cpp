@@ -11,6 +11,7 @@ Client::Client(string sip) {
 
 	create_socket();
 	get_host_address();
+	connect_to_server();
 }
 
 Client::Client() : Client("127.0.0.1") {}
@@ -59,6 +60,21 @@ void Client::get_host_address() {
 		}
 		memcpy(&serveraddr.sin_addr, hostp->h_addr, sizeof(serveraddr.sin_addr));
 	}
+}
+
+void Client::connect_to_server() {
+	/* After the socket descriptor is received, the */
+	/* connect() function is used to establish a */
+	/* connection to the server. */
+	/***********************************************/
+	/* connect() to server. */
+	if ((rc = connect(sd, (struct sockaddr *)&serveraddr, sizeof(serveraddr))) < 0) {
+		perror("Client-connect() error");
+		close(sd);
+		exit(-1);
+	}
+	else
+		printf("Connection established...\n");
 }
 
 string Client::get_server() {

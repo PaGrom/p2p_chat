@@ -44,6 +44,7 @@ public:
 
 	void create_socket();
 	void get_host_address();
+	void connect_to_server();
 
 	string get_server();
 };
