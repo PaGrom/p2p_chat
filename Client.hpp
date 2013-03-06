@@ -29,7 +29,7 @@ private:
 
 	int sd;
 	int rc;
-	int length;
+	unsigned int length;
 	struct sockaddr_in serveraddr;
 	// char buffer[BufferLength];
 	char temp;
@@ -45,6 +45,7 @@ public:
 	void create_socket();
 	void get_host_address();
 	void connect_to_server();
+	void write_to_server();
 
 	string get_server();
 };

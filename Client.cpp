@@ -12,6 +12,7 @@ Client::Client(string sip) {
 	create_socket();
 	get_host_address();
 	connect_to_server();
+	write_to_server();
 }
 
 Client::Client() : Client("127.0.0.1") {}
@@ -75,6 +76,32 @@ void Client::connect_to_server() {
 	}
 	else
 		printf("Connection established...\n");
+}
+
+void Client::write_to_server() {
+	/* Send string to the server using */
+	/* the write() function. */
+	/*********************************************/
+	/* Write() some string to the server. */
+	printf("Sending some string to the f***ing %s...\n", server.c_str());
+	rc = write(sd, data.c_str(), sizeof(data.c_str()));
+	 
+	if(rc < 0) {
+		perror("Client-write() error");
+		rc = getsockopt(sd, SOL_SOCKET, SO_ERROR, &temp, &length);
+		if(rc == 0) {
+			/* Print out the asynchronously received error. */
+			errno = temp;
+			perror("SO_ERROR was");
+		}
+		close(sd);
+		exit(-1);
+	}
+	else {
+		printf("Client-write() is OK\n");
+		printf("String successfully sent lol!\n");
+		printf("Waiting the %s to echo back...\n", server.c_str());
+	}
 }
 
 string Client::get_server() {
