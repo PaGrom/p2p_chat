@@ -10,6 +10,7 @@ Client::Client(string sip) {
 	data = "This is a test string from client lol!!! ";
 
 	create_socket();
+	get_host_address();
 }
 
 Client::Client() : Client("127.0.0.1") {}
@@ -31,6 +32,33 @@ void Client::create_socket() {
 	}
 	else
 		printf("Client-socket() OK\n");
+}
+
+void Client::get_host_address() {
+	memset(&serveraddr, 0x00, sizeof(struct sockaddr_in));
+	serveraddr.sin_family = AF_INET;
+	serveraddr.sin_port = htons(server_port);
+	 
+	if ((serveraddr.sin_addr.s_addr = inet_addr(server.c_str())) == (unsigned long)INADDR_NONE) {
+		 
+		/* When passing the host name of the server as a */
+		/* parameter to this program, use the gethostbyname() */
+		/* function to retrieve the address of the host server. */
+		/***************************************************/
+		/* get host address */
+		hostp = gethostbyname(server.c_str());
+		if (hostp == NULL) {
+			printf("HOST NOT FOUND --> ");
+			/* h_errno is usually defined */
+			/* in netdb.h */
+			printf("h_errno = %d\n",h_errno);
+			printf("---This is a client program---\n");
+			printf("Command usage: <programm name> <server name or IP>\n");
+			close(sd);
+			exit(-1);
+		}
+		memcpy(&serveraddr.sin_addr, hostp->h_addr, sizeof(serveraddr.sin_addr));
+	}
 }
 
 string Client::get_server() {

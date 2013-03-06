@@ -43,6 +43,7 @@ public:
 	~Client();
 
 	void create_socket();
+	void get_host_address();
 
 	string get_server();
 };
