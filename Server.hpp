@@ -16,6 +16,7 @@ using namespace std;
 class Server {
 private:
 	int BufferLength;
+	int server_port;
 	int sd;
 	int sd2;
 	int rc;
@@ -36,6 +37,7 @@ public:
 
 	void create_socket();
 	void allow_socket();
+	void bind_socket();
 };
 
 #endif
