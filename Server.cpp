@@ -11,6 +11,7 @@ Server::Server() {
 	create_socket();
 	allow_socket();
 	bind_socket();
+	get_ready();
 	accept_socket();
 	get_ready_to_read();
 	write_to_client_back();
@@ -75,6 +76,23 @@ void Server::bind_socket() {
 	}
 	else
 		printf("Server-bind() is OK\n");
+}
+
+void Server::get_ready() {
+	/* The listen() function allows the server to accept */
+	/* incoming client connections. In this example, */
+	/* the backlog is set to 10. This means that the */
+	/* system can queue up to 10 connection requests before */
+	/* the system starts rejecting incoming requests.*/
+	/*************************************************/
+	/* Up to 10 clients can be queued */
+	if ((rc = listen(sd, 10)) < 0) {
+		perror("Server-listen() error");
+		close(sd);
+		exit (-1);
+	}
+	else
+		printf("Server-Ready for client connection...\n");
 }
 
 void Server::accept_socket() {

@@ -38,6 +38,7 @@ public:
 	void create_socket();
 	void allow_socket();
 	void bind_socket();
+	void get_ready();
 	void accept_socket();
 	void get_ready_to_read();
 	void write_to_client_back();
