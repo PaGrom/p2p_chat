@@ -1,8 +1,7 @@
 #include "Client.hpp"
 
-Client::Client(string sip) {
+void Client::CommonInit() {
 	BufferLength = 100;
-	server = sip;
 	server_port = 3111;
 
 	sd, rc, length = sizeof(int);
@@ -13,9 +12,16 @@ Client::Client(string sip) {
 	get_host_address();
 	connect_to_server();
 	write_to_server();
+	wait_server_echo_back();
 }
 
-Client::Client() : Client("127.0.0.1") {}
+Client::Client(string sip) : server(sip) {
+	CommonInit();
+}
+
+Client::Client() : server("127.0.0.1") {
+	CommonInit();
+}
 
 Client::~Client() {}
 
@@ -84,12 +90,12 @@ void Client::write_to_server() {
 	/*********************************************/
 	/* Write() some string to the server. */
 	printf("Sending some string to the f***ing %s...\n", server.c_str());
-	rc = write(sd, data.c_str(), sizeof(data.c_str()));
+	rc = write(sd, data.c_str(), sizeof(data));
 	 
 	if(rc < 0) {
 		perror("Client-write() error");
 		rc = getsockopt(sd, SOL_SOCKET, SO_ERROR, &temp, &length);
-		if(rc == 0) {
+		if (rc == 0) {
 			/* Print out the asynchronously received error. */
 			errno = temp;
 			perror("SO_ERROR was");
@@ -102,6 +108,40 @@ void Client::write_to_server() {
 		printf("String successfully sent lol!\n");
 		printf("Waiting the %s to echo back...\n", server.c_str());
 	}
+}
+
+void Client::wait_server_echo_back() {
+	totalcnt = 0;
+	while(totalcnt < BufferLength) {
+
+		/* Wait for the server to echo the */
+		/* string by using the read() function. */
+		/***************************************/
+		/* Read data from the server. */
+		rc = read(sd, &buffer[totalcnt], BufferLength-totalcnt);
+
+		if (rc < 0) {
+			perror("Client-read() error");
+			close(sd);
+			exit(-1);
+		}
+		else if (rc == 0) {
+			printf("Server program has issued a close()\n");
+			close(sd);
+			exit(-1);
+		}
+		else
+			totalcnt += rc;
+	}
+	printf("Client-read() is OK\n");
+	printf("Echoed data from the f***ing server: %s\n", buffer);
+
+	/* When the data has been read, close() */
+	/* the socket descriptor. */
+	/****************************************/
+	/* Close socket descriptor from client side. */
+	close(sd);
+	exit(0);
 }
 
 string Client::get_server() {

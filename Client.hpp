@@ -31,11 +31,13 @@ private:
 	int rc;
 	unsigned int length;
 	struct sockaddr_in serveraddr;
-	// char buffer[BufferLength];
+	char buffer[100];
 	char temp;
 	int totalcnt;
 	struct hostent *hostp;
 	string data;
+
+	void CommonInit();
 
 public:
 	Client(string sip);
@@ -46,6 +48,7 @@ public:
 	void get_host_address();
 	void connect_to_server();
 	void write_to_server();
+	void wait_server_echo_back();
 
 	string get_server();
 };
