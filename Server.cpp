@@ -12,7 +12,7 @@ Server::Server() {
 	allow_socket();
 	bind_socket();
 	accept_socket();
-	get_ready();
+	get_ready_to_read();
 	write_to_client_back();
 	close_connect();
 }
@@ -90,7 +90,7 @@ void Server::accept_socket() {
 	if ((sd2 = accept(sd, (struct sockaddr *)&their_addr, &sin_size)) < 0) {
 		perror("Server-accept() error");
 		close(sd);
-		exit (-1);
+		exit(-1);
 	}
 	else
 		printf("Server-accept() is OK\n");
@@ -100,7 +100,7 @@ void Server::accept_socket() {
 	// printf("Got connection from the f***ing client: %d\n", inet_ntoa(their_addr.sin_addr));
 }
 
-void Server::get_ready() {
+void Server::get_ready_to_read() {
 	/* The select() function allows the process to */
 	/* wait for an event to occur and to wake up */
 	/* the process when the event occurs. In this */
