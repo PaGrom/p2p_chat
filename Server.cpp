@@ -7,3 +7,5 @@ Server::Server() {
 	timeout.tv_sec = 15;
 	timeout.tv_usec = 0;
 }
+
+Server::~Server() {}
