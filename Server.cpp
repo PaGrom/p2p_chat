@@ -12,6 +12,7 @@ Server::Server() {
 	allow_socket();
 	bind_socket();
 	accept_socket();
+	get_ready();
 }
 
 Server::~Server() {}
@@ -95,4 +96,65 @@ void Server::accept_socket() {
 	/*client IP*/
 	printf("Server-new socket, sd2 is OK...\n");
 	// printf("Got connection from the f***ing client: %d\n", inet_ntoa(their_addr.sin_addr));
+}
+
+void Server::get_ready() {
+	/* The select() function allows the process to */
+	/* wait for an event to occur and to wake up */
+	/* the process when the event occurs. In this */
+	/* example, the system notifies the process */
+	/* only when data is available to read. */
+	/***********************************************/
+	/* Wait for up to 15 seconds on */
+	/* select() for data to be read. */
+	FD_ZERO(&read_fd);
+	FD_SET(sd2, &read_fd);
+	rc = select(sd2+1, &read_fd, NULL, NULL, &timeout);
+	if ((rc == 1) && (FD_ISSET(sd2, &read_fd))) {
+		/* Read data from the client. */
+		totalcnt = 0;
+		 
+		while(totalcnt < BufferLength) {
+			/* When select() indicates that there is data */
+			/* available, use the read() function to read */
+			/* 100 bytes of the string that the */
+			/* client sent. */
+			/***********************************************/
+			/* read() from client */
+			rc = read(sd2, &buffer[totalcnt], (BufferLength - totalcnt));
+			if (rc < 0) {
+				perror("Server-read() error");
+				close(sd);
+				close(sd2);
+				exit (-1);
+			}
+			else if (rc == 0) {
+				printf("Client program has issued a close()\n");
+				close(sd);
+				close(sd2);
+				exit(-1);
+			}
+			else {
+				totalcnt += rc;
+				printf("Server-read() is OK\n");
+			}
+			 
+		}
+	}
+	else if (rc < 0) {
+		perror("Server-select() error");
+		close(sd);
+		close(sd2);
+		exit(-1);
+	}
+	/* rc == 0 */
+	else {
+		printf("Server-select() timed out.\n");
+		close(sd);
+		close(sd2);
+		exit(-1);
+	}
+	 
+	/* Shows the data */
+	printf("Received data from the f***ing client: %s\n", buffer);
 }

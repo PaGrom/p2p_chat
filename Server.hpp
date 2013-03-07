@@ -39,6 +39,7 @@ public:
 	void allow_socket();
 	void bind_socket();
 	void accept_socket();
+	void get_ready();
 };
 
 #endif
