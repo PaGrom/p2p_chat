@@ -35,6 +35,7 @@ public:
 	~Server();
 
 	void create_socket();
+	void allow_socket();
 };
 
 #endif
