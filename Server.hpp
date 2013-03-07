@@ -38,6 +38,7 @@ public:
 	void create_socket();
 	void allow_socket();
 	void bind_socket();
+	void accept_socket();
 };
 
 #endif

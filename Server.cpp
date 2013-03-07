@@ -11,6 +11,7 @@ Server::Server() {
 	create_socket();
 	allow_socket();
 	bind_socket();
+	accept_socket();
 }
 
 Server::~Server() {}
@@ -71,4 +72,27 @@ void Server::bind_socket() {
 	}
 	else
 		printf("Server-bind() is OK\n");
+}
+
+void Server::accept_socket() {
+	/* The server will accept a connection request */
+	/* with this accept() function, provided the */
+	/* connection request does the following: */
+	/* - Is part of the same address family */
+	/* - Uses streams sockets (TCP) */
+	/* - Attempts to connect to the specified port */
+	/***********************************************/
+	/* accept() the incoming connection request. */
+	unsigned int sin_size = sizeof(struct sockaddr_in);
+	if ((sd2 = accept(sd, (struct sockaddr *)&their_addr, &sin_size)) < 0) {
+		perror("Server-accept() error");
+		close(sd);
+		exit (-1);
+	}
+	else
+		printf("Server-accept() is OK\n");
+	 
+	/*client IP*/
+	printf("Server-new socket, sd2 is OK...\n");
+	// printf("Got connection from the f***ing client: %d\n", inet_ntoa(their_addr.sin_addr));
 }
