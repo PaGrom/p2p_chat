@@ -39,7 +39,7 @@ public:
 	void allow_socket();
 	void bind_socket();
 	void accept_socket();
-	void get_ready();
+	void get_ready_to_read();
 	void write_to_client_back();
 	void close_connect();
 };
