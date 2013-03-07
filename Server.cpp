@@ -14,6 +14,7 @@ Server::Server() {
 	accept_socket();
 	get_ready();
 	write_to_client_back();
+	close_connect();
 }
 
 Server::~Server() {}
@@ -169,11 +170,11 @@ void Server::write_to_client_back() {
 	/* back to the client. */
 	printf("Server-Echoing back to client...\n");
 	rc = write(sd2, buffer, totalcnt);
-	if(rc != totalcnt) {
+	if (rc != totalcnt) {
 		perror("Server-write() error");
 		/* Get the error number. */
 		rc = getsockopt(sd2, SOL_SOCKET, SO_ERROR, &temp, &length);
-		if(rc == 0) {
+		if (rc == 0) {
 			/* Print out the asynchronously */
 			/* received error. */
 			errno = temp;
@@ -186,4 +187,18 @@ void Server::write_to_client_back() {
 		close(sd2);
 		exit(-1);
 	}
+}
+
+void Server::close_connect() {
+	/* When the data has been sent, close() */
+	/* the socket descriptor that was returned */
+	/* from the accept() verb and close() the */
+	/* original socket descriptor. */
+	/*****************************************/
+	/* Close the connection to the client and */
+	/* close the server listening socket. */
+	/******************************************/
+	close(sd2);
+	close(sd);
+	exit(0);
 }

@@ -41,6 +41,7 @@ public:
 	void accept_socket();
 	void get_ready();
 	void write_to_client_back();
+	void close_connect();
 };
 
 #endif
