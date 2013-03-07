@@ -13,6 +13,7 @@ Server::Server() {
 	bind_socket();
 	accept_socket();
 	get_ready();
+	write_to_client_back();
 }
 
 Server::~Server() {}
@@ -157,4 +158,32 @@ void Server::get_ready() {
 	 
 	/* Shows the data */
 	printf("Received data from the f***ing client: %s\n", buffer);
+}
+
+void Server::write_to_client_back() {
+	/* Echo some bytes of string, back */
+	/* to the client by using the write() */
+	/* function. */
+	/************************************/
+	/* write() some bytes of string, */
+	/* back to the client. */
+	printf("Server-Echoing back to client...\n");
+	rc = write(sd2, buffer, totalcnt);
+	if(rc != totalcnt) {
+		perror("Server-write() error");
+		/* Get the error number. */
+		rc = getsockopt(sd2, SOL_SOCKET, SO_ERROR, &temp, &length);
+		if(rc == 0) {
+			/* Print out the asynchronously */
+			/* received error. */
+			errno = temp;
+			perror("SO_ERROR was: ");
+		}
+		else
+			printf("Server-write() is OK\n");
+		 
+		close(sd);
+		close(sd2);
+		exit(-1);
+	}
 }

@@ -20,7 +20,7 @@ private:
 	int sd;
 	int sd2;
 	int rc;
-	int length;
+	unsigned int length;
 	int totalcnt;
 	int on;
 	char temp;
@@ -40,6 +40,7 @@ public:
 	void bind_socket();
 	void accept_socket();
 	void get_ready();
+	void write_to_client_back();
 };
 
 #endif
