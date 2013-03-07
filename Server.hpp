@@ -34,7 +34,7 @@ public:
 	Server();
 	~Server();
 
-	/* data */
+	void create_socket();
 };
 
 #endif
