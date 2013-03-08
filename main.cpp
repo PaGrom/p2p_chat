@@ -2,11 +2,14 @@
 
 int main(int argc, char const *argv[]) {
 	/*If the server hostname is supplied*/
+	Client* client;
 	if(argc > 1)
-		Client* client = new Client(argv[1]);
+		client = new Client(argv[1]);
 	else
 	/*Use the default server name or IP*/
-		Client* client = new Client();
+		client = new Client();
 	
+	client->run();
+
 	return 0;
 }

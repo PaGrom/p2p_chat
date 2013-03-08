@@ -6,13 +6,6 @@ void Client::CommonInit() {
 
 	totalcnt = 0;
 	strcpy(data, "This is a test string from client lol!!! ");
-
-	create_socket();
-	get_host_address();
-	connect_to_server();
-	write_to_server();
-	wait_server_echo_back();
-	close_connect();
 }
 
 Client::Client(string sip) : server(sip) {
@@ -24,6 +17,15 @@ Client::Client() : server("127.0.0.1") {
 }
 
 Client::~Client() {}
+
+void Client::run() {
+	create_socket();
+	get_host_address();
+	connect_to_server();
+	write_to_server();
+	wait_server_echo_back();
+	close_connect();
+}
 
 void Client::create_socket() {
 	/* The socket() function returns a socket */
