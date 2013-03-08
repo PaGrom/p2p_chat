@@ -21,8 +21,12 @@ void Client::run() {
 	create_socket();
 	get_host_address();
 	connect_to_server();
-	write_to_server();
-	wait_server_echo_back();
+
+	while (true) {
+		write_to_server();
+		wait_server_echo_back();
+	}
+
 	close_connect();
 }
 
