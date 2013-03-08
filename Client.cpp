@@ -12,6 +12,7 @@ void Client::CommonInit() {
 	connect_to_server();
 	write_to_server();
 	wait_server_echo_back();
+	close_connect();
 }
 
 Client::Client(string sip) : server(sip) {
@@ -133,7 +134,9 @@ void Client::wait_server_echo_back() {
 	}
 	printf("Client-read() is OK\n");
 	printf("Echoed data from the f***ing server: %s\n", buffer);
+}
 
+void Client::close_connect() {
 	/* When the data has been read, close() */
 	/* the socket descriptor. */
 	/****************************************/

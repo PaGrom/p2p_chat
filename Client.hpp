@@ -49,6 +49,7 @@ public:
 	void connect_to_server();
 	void write_to_server();
 	void wait_server_echo_back();
+	void close_connect();
 
 	string get_server();
 };
