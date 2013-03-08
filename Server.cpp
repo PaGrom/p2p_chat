@@ -5,8 +5,6 @@ Server::Server() {
 	server_port = 3111;
 	totalcnt = 0;
 	on = 1;
-	timeout.tv_sec = 15;
-	timeout.tv_usec = 0;
 }
 
 Server::~Server() {}
@@ -17,8 +15,12 @@ void Server::run() {
 	bind_socket();
 	get_ready();
 	accept_socket();
-	get_ready_to_read();
-	write_to_client_back();
+	
+	while (true) {
+		get_ready_to_read();
+		write_to_client_back();
+	}
+	
 	close_connect();
 }
 
@@ -129,6 +131,8 @@ void Server::get_ready_to_read() {
 	/***********************************************/
 	/* Wait for up to 15 seconds on */
 	/* select() for data to be read. */
+	timeout.tv_sec = 3600;
+	timeout.tv_usec = 0;
 	FD_ZERO(&read_fd);
 	FD_SET(sd2, &read_fd);
 	rc = select(sd2+1, &read_fd, NULL, NULL, &timeout);
