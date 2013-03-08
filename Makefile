@@ -1,3 +1,3 @@
 all:
-	gcc tcpserver.c -o tcpserver
-	gcc tcpclient.c -o tcpclient
+	g++ Client.cpp main.cpp -o client
+	g++ Server.cpp -o server
