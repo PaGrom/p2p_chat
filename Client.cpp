@@ -4,9 +4,8 @@ void Client::CommonInit() {
 	BufferLength = 100;
 	server_port = 3111;
 
-	sd, rc, length = sizeof(int);
 	totalcnt = 0;
-	data = "This is a test string from client lol!!! ";
+	strcpy(data, "This is a test string from client lol!!! ");
 
 	create_socket();
 	get_host_address();
@@ -90,9 +89,9 @@ void Client::write_to_server() {
 	/*********************************************/
 	/* Write() some string to the server. */
 	printf("Sending some string to the f***ing %s...\n", server.c_str());
-	rc = write(sd, data.c_str(), sizeof(data));
+	rc = write(sd, data, sizeof(data));
 	 
-	if(rc < 0) {
+	if (rc < 0) {
 		perror("Client-write() error");
 		rc = getsockopt(sd, SOL_SOCKET, SO_ERROR, &temp, &length);
 		if (rc == 0) {
@@ -111,9 +110,8 @@ void Client::write_to_server() {
 }
 
 void Client::wait_server_echo_back() {
-	totalcnt = 0;
-	while(totalcnt < BufferLength) {
 
+	while (totalcnt < BufferLength) {
 		/* Wait for the server to echo the */
 		/* string by using the read() function. */
 		/***************************************/

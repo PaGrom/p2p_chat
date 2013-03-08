@@ -35,7 +35,7 @@ private:
 	char temp;
 	int totalcnt;
 	struct hostent *hostp;
-	string data;
+	char data[100];
 
 	void CommonInit();
 
