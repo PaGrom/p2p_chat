@@ -7,7 +7,11 @@ Server::Server() {
 	on = 1;
 	timeout.tv_sec = 15;
 	timeout.tv_usec = 0;
+}
 
+Server::~Server() {}
+
+void Server::run() {
 	create_socket();
 	allow_socket();
 	bind_socket();
@@ -17,8 +21,6 @@ Server::Server() {
 	write_to_client_back();
 	close_connect();
 }
-
-Server::~Server() {}
 
 void Server::create_socket() {
 	/* The socket() function returns a socket descriptor */

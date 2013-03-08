@@ -35,6 +35,8 @@ public:
 	Server();
 	~Server();
 
+	void run();
+
 	void create_socket();
 	void allow_socket();
 	void bind_socket();
