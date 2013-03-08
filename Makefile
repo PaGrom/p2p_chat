@@ -1,3 +1,2 @@
 all:
-	g++ Client.cpp main.cpp -o client
-	g++ Server.cpp -o server
+	g++ Server.cpp Client.cpp main.cpp -o main -pthread
