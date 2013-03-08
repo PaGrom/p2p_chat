@@ -5,7 +5,6 @@ void Client::CommonInit() {
 	server_port = 3111;
 
 	totalcnt = 0;
-	strcpy(data, "This is a test string from client lol!!! ");
 }
 
 Client::Client(string sip) : server(sip) {
@@ -92,6 +91,8 @@ void Client::write_to_server() {
 	/*********************************************/
 	/* Write() some string to the server. */
 	printf("Sending some string to the f***ing %s...\n", server.c_str());
+	printf("> ");
+	cin >> data;
 	rc = write(sd, data, sizeof(data));
 	 
 	if (rc < 0) {
