@@ -5,6 +5,8 @@ Server::Server() {
 	server_port = 3111;
 	totalcnt = 0;
 	on = 1;
+
+	nickname = "Server";
 }
 
 Server::~Server() {}
@@ -182,7 +184,7 @@ void Server::get_ready_to_read() {
 	}
 	 
 	/* Shows the data */
-	printf("Received data from the f***ing client: %s\n", buffer);
+	printf(" %s %s: %s\n", get_time().c_str(), nickname.c_str(), buffer);
 }
 
 void Server::write_to_client_back() {

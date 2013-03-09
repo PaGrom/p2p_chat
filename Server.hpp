@@ -10,6 +10,9 @@
 #include <netinet/in.h>
 #include <errno.h>
 #include <unistd.h>
+#include <iostream>
+
+#include "funcs.hpp"
 
 using namespace std;
 
@@ -30,6 +33,8 @@ private:
 	 
 	fd_set read_fd;
 	struct timeval timeout;
+
+	string nickname;
 
 public:
 	Server();
