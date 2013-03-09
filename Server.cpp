@@ -6,12 +6,15 @@ Server::Server() {
 	totalcnt = 0;
 	on = 1;
 
+	logfile_name = "server.log";
+
 	nickname = "Server";
 }
 
 Server::~Server() {}
 
 void Server::run() {
+	write_to_log(logfile_name, "Start...\n");
 	create_socket();
 	allow_socket();
 	bind_socket();
@@ -35,12 +38,15 @@ void Server::create_socket() {
 	/************************************************/
 	/* Get a socket descriptor */
 	if ((sd = socket(AF_INET, SOCK_STREAM, 0)) < 0) {
-		perror("Server-socket() error");
+		char buff[100];
+		snprintf(buff, sizeof(buff), "Server-socket() error: %s\n", strerror(errno));
+		write_to_log(logfile_name, buff);
+		printf("Error!! See %s\n", logfile_name.c_str());
 		/* Just exit */
 		exit (-1);
 	}
 	else
-		printf("Server-socket() is OK\n");
+		write_to_log(logfile_name, "Server-socket() is OK\n");
 }
 
 void Server::allow_socket() {
@@ -51,12 +57,15 @@ void Server::allow_socket() {
 	/***********************************************/
 	/* Allow socket descriptor to be reusable */
 	if ((rc = setsockopt(sd, SOL_SOCKET, SO_REUSEADDR, (char *)&on, sizeof(on))) < 0) {
-		perror("Server-setsockopt() error");
+		char buff[100];
+		snprintf(buff, sizeof(buff), "Server-setsockopt() error: %s\n", strerror(errno));
+		write_to_log(logfile_name, buff);
+		printf("Error!! See %s\n", logfile_name.c_str());
 		close(sd);
 		exit (-1);
 	}
 	else
-		printf("Server-setsockopt() is OK\n");
+		write_to_log(logfile_name, "Server-setsockopt() is OK\n");
 }
 
 void Server::bind_socket() {
@@ -65,8 +74,6 @@ void Server::bind_socket() {
 	serveraddr.sin_family = AF_INET;
 	serveraddr.sin_port = htons(server_port);
 	serveraddr.sin_addr.s_addr = htonl(INADDR_ANY);
-	printf("%d\n", htonl(INADDR_ANY));
-	// printf("Using %d, listening at %d\n", inet_ntoa(serveraddr.sin_addr), server_port);
 	 
 	/* After the socket descriptor is created, a bind() */
 	/* function gets a unique name for the socket. */
@@ -74,14 +81,17 @@ void Server::bind_socket() {
 	/* s_addr to zero, which allows the system to */
 	/* connect to any client that used port 3005. */
 	if ((rc = bind(sd, (struct sockaddr *)&serveraddr, sizeof(serveraddr))) < 0) {
-		perror("Server-bind() error");
+		char buff[100];
+		snprintf(buff, sizeof(buff), "Server-bind() error: %s\n", strerror(errno));
+		write_to_log(logfile_name, buff);
+		printf("Error!! See %s\n", logfile_name.c_str());
 		/* Close the socket descriptor */
 		close(sd);
 		/* and just exit */
 		exit(-1);
 	}
 	else
-		printf("Server-bind() is OK\n");
+		write_to_log(logfile_name, "Server-bind() is OK\n");
 }
 
 void Server::get_ready() {
@@ -93,12 +103,15 @@ void Server::get_ready() {
 	/*************************************************/
 	/* Up to 10 clients can be queued */
 	if ((rc = listen(sd, 10)) < 0) {
-		perror("Server-listen() error");
+		char buff[100];
+		snprintf(buff, sizeof(buff), "Server-listen() error: %s\n", strerror(errno));
+		write_to_log(logfile_name, buff);
+		printf("Error!! See %s\n", logfile_name.c_str());
 		close(sd);
 		exit (-1);
 	}
 	else
-		printf("Server-Ready for client connection...\n");
+		write_to_log(logfile_name, "Server-Ready for client connection...\n");
 }
 
 void Server::accept_socket() {
@@ -112,15 +125,18 @@ void Server::accept_socket() {
 	/* accept() the incoming connection request. */
 	unsigned int sin_size = sizeof(struct sockaddr_in);
 	if ((sd2 = accept(sd, (struct sockaddr *)&their_addr, &sin_size)) < 0) {
-		perror("Server-accept() error");
+		char buff[100];
+		snprintf(buff, sizeof(buff), "Server-accept() error: %s\n", strerror(errno));
+		write_to_log(logfile_name, buff);
+		printf("Error!! See %s\n", logfile_name.c_str());
 		close(sd);
 		exit(-1);
 	}
 	else
-		printf("Server-accept() is OK\n");
+		write_to_log(logfile_name, "Server-accept() is OK\n");
 	 
 	/*client IP*/
-	printf("Server-new socket, sd2 is OK...\n");
+	write_to_log(logfile_name, "Server-new socket, sd2 is OK...\n");
 	// printf("Got connection from the f***ing client: %d\n", inet_ntoa(their_addr.sin_addr));
 }
 
@@ -151,33 +167,41 @@ void Server::get_ready_to_read() {
 			/* read() from client */
 			rc = read(sd2, &buffer[totalcnt], (BufferLength - totalcnt));
 			if (rc < 0) {
-				perror("Server-read() error");
+				char buff[100];
+				snprintf(buff, sizeof(buff), "Server-read() error: %s\n", strerror(errno));
+				write_to_log(logfile_name, buff);
+				printf("Error!! See %s\n", logfile_name.c_str());
 				close(sd);
 				close(sd2);
 				exit (-1);
 			}
 			else if (rc == 0) {
-				printf("Client program has issued a close()\n");
+				write_to_log(logfile_name, "Client program has issued a close()\n");
+				printf("Error!! See %s\n", logfile_name.c_str());
 				close(sd);
 				close(sd2);
 				exit(-1);
 			}
 			else {
 				totalcnt += rc;
-				printf("Server-read() is OK\n");
+				write_to_log(logfile_name, "Server-read() is OK\n");
 			}
 			 
 		}
 	}
 	else if (rc < 0) {
-		perror("Server-select() error");
+		char buff[100];
+		snprintf(buff, sizeof(buff), "Server-select() error: %s\n", strerror(errno));
+		write_to_log(logfile_name, buff);
+		printf("Error!! See %s\n", logfile_name.c_str());
 		close(sd);
 		close(sd2);
 		exit(-1);
 	}
 	/* rc == 0 */
 	else {
-		printf("Server-select() timed out.\n");
+		write_to_log(logfile_name, "Server-select() timed out.\n");
+		printf("Error!! See %s\n", logfile_name.c_str());
 		close(sd);
 		close(sd2);
 		exit(-1);
@@ -194,20 +218,26 @@ void Server::write_to_client_back() {
 	/************************************/
 	/* write() some bytes of string, */
 	/* back to the client. */
-	printf("Server-Echoing back to client...\n");
+	write_to_log(logfile_name, "Server-Echoing back to client...\n");
 	rc = write(sd2, buffer, totalcnt);
 	if (rc != totalcnt) {
-		perror("Server-write() error");
+		char buff[100];
+		snprintf(buff, sizeof(buff), "Server-write() error: %s\n", strerror(errno));
+		write_to_log(logfile_name, buff);
+		printf("Error!! See %s\n", logfile_name.c_str());
 		/* Get the error number. */
 		rc = getsockopt(sd2, SOL_SOCKET, SO_ERROR, &temp, &length);
 		if (rc == 0) {
 			/* Print out the asynchronously */
 			/* received error. */
 			errno = temp;
-			perror("SO_ERROR was: ");
+			memset(buff, 0, sizeof(buff));
+			snprintf(buff, sizeof(buff), "SO_ERROR was: %s\n", strerror(errno));
+			write_to_log(logfile_name, buff);
+			printf("Error!! See %s\n", logfile_name.c_str());
 		}
 		else
-			printf("Server-write() is OK\n");
+			write_to_log(logfile_name, "Server-write() is OK\n");
 		 
 		close(sd);
 		close(sd2);

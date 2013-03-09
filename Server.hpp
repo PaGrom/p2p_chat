@@ -34,6 +34,8 @@ private:
 	fd_set read_fd;
 	struct timeval timeout;
 
+	string logfile_name;
+
 	string nickname;
 
 public:
