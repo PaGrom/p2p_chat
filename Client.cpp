@@ -95,8 +95,10 @@ void Client::write_to_server() {
 	/*********************************************/
 	/* Write() some string to the server. */
 	printf("Sending some string to the f***ing %s...\n", server.c_str());
-	printf("> ");
+	printf(" > ");
 	cin >> data;
+	std::cout << "\033[1A";
+	
 	rc = write(sd, data, sizeof(data));
 	 
 	if (rc < 0) {
@@ -139,6 +141,7 @@ void Client::wait_server_echo_back() {
 		else
 			totalcnt += rc;
 	}
+	printf("*> %s\n", data);
 	printf("Client-read() is OK\n");
 	printf("Echoed data from the f***ing server: %s\n", buffer);
 }
