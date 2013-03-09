@@ -9,7 +9,6 @@ string get_time() {
     tm_info = localtime(&timer);
 
     strftime(buffer, 25, "%Y:%m:%d %H:%M:%S", tm_info);
-    printf("%s\n", buffer);
 
     return buffer;
 }
