@@ -38,6 +38,8 @@ private:
 	struct hostent *hostp;
 	char data[100];
 
+	string nickname;
+
 	void CommonInit();
 
 public:

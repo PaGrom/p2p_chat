@@ -5,6 +5,8 @@ void Client::CommonInit() {
 	server_port = 3111;
 
 	totalcnt = 0;
+
+	nickname = "PaGrom";
 }
 
 Client::Client(string sip) : server(sip) {
@@ -141,7 +143,7 @@ void Client::wait_server_echo_back() {
 		else
 			totalcnt += rc;
 	}
-	printf("*> %s\n", data);
+	printf("* %s: %s\n", nickname.c_str(), data);
 	printf("Client-read() is OK\n");
 	printf("Echoed data from the f***ing server: %s\n", buffer);
 }
