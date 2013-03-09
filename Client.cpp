@@ -21,14 +21,8 @@ Client::Client() : server("127.0.0.1") {
 
 Client::~Client() {}
 
-void Client::write_to_log(string line) {
-	logfile = fopen(logfile_name.c_str(), "at");
-	fprintf(logfile, "%s %s", get_time().c_str(), line.c_str());
-	fclose(logfile);
-}
-
 void Client::run() {
-	write_to_log("Start...\n");
+	write_to_log(logfile_name, "Start...\n");
 	create_socket();
 	get_host_address();
 	connect_to_server();
@@ -53,12 +47,12 @@ void Client::create_socket() {
 	if ((sd = socket(AF_INET, SOCK_STREAM, 0)) < 0) {
 		char buff[100];
 		snprintf(buff, sizeof(buff), "Client-socket() error: %s\n", strerror(errno));
-		write_to_log(buff);
+		write_to_log(logfile_name, buff);
 		printf("Error!! See %s\n", logfile_name.c_str());
 		exit(-1);
 	}
 	else
-		write_to_log("Client-socket() OK\n");
+		write_to_log(logfile_name, "Client-socket() OK\n");
 }
 
 void Client::get_host_address() {
@@ -79,8 +73,8 @@ void Client::get_host_address() {
 			/* in netdb.h */
 			char buff[100];
 			snprintf(buff, sizeof(buff), "HOST NOT FOUND --> h_errno = %d\n",h_errno);
-			write_to_log(buff);
-			write_to_log("Command usage: <programm name> <server IP>\n");
+			write_to_log(logfile_name, buff);
+			write_to_log(logfile_name, "Command usage: <programm name> <server IP>\n");
 			printf("Error!! See %s\n", logfile_name.c_str());
 			close(sd);
 			exit(-1);
@@ -98,7 +92,7 @@ void Client::connect_to_server() {
 	if ((rc = connect(sd, (struct sockaddr *)&serveraddr, sizeof(serveraddr))) < 0) {
 		char buff[100];
 		snprintf(buff, sizeof(buff), "Client-connect() error: %s\n", strerror(errno));
-		write_to_log(buff);
+		write_to_log(logfile_name, buff);
 		printf("Error!! See %s\n", logfile_name.c_str());
 		close(sd);
 		exit(-1);
@@ -106,7 +100,7 @@ void Client::connect_to_server() {
 	else {
 		char buff[100];
 		snprintf(buff, sizeof(buff), "Connection with %s established...\n", server.c_str());
-		write_to_log(buff);
+		write_to_log(logfile_name, buff);
 	}
 }
 
@@ -125,7 +119,7 @@ void Client::write_to_server() {
 	if (rc < 0) {
 		char buff[100];
 		snprintf(buff, sizeof(buff), "Client-write() error: %s\n", strerror(errno));
-		write_to_log(buff);
+		write_to_log(logfile_name, buff);
 		printf("Error!! See %s\n", logfile_name.c_str());
 		rc = getsockopt(sd, SOL_SOCKET, SO_ERROR, &temp, &length);
 		if (rc == 0) {
@@ -133,15 +127,15 @@ void Client::write_to_server() {
 			errno = temp;
 			memset(buff, 0, sizeof(buff));
 			snprintf(buff, sizeof(buff), "SO_ERROR was: %s\n", strerror(errno));
-			write_to_log(buff);
+			write_to_log(logfile_name, buff);
 		}
 		close(sd);
 		exit(-1);
 	}
 	else {
-		write_to_log("Client-write() is OK\n");
-		write_to_log("String successfully sent!\n");
-		write_to_log("Waiting the server to echo back...\n");
+		write_to_log(logfile_name, "Client-write() is OK\n");
+		write_to_log(logfile_name, "String successfully sent!\n");
+		write_to_log(logfile_name, "Waiting the server to echo back...\n");
 	}
 }
 
@@ -157,13 +151,13 @@ void Client::wait_server_echo_back() {
 		if (rc < 0) {
 			char buff[100];
 			snprintf(buff, sizeof(buff), "Client-read() error: %s\n", strerror(errno));
-			write_to_log(buff);
+			write_to_log(logfile_name, buff);
 			printf("Error!! See %s\n", logfile_name.c_str());
 			close(sd);
 			exit(-1);
 		}
 		else if (rc == 0) {
-			write_to_log("Server program has issued a close()\n");
+			write_to_log(logfile_name, "Server program has issued a close()\n");
 			printf("Error!! See %s\n", logfile_name.c_str());
 			close(sd);
 			exit(-1);
@@ -172,7 +166,7 @@ void Client::wait_server_echo_back() {
 			totalcnt += rc;
 	}
 
-	write_to_log("Client-read() is OK\n");
+	write_to_log(logfile_name, "Client-read() is OK\n");
 	printf("*%s %s: %s\n", get_time().c_str(), nickname.c_str(), data);
 	memset(buffer, 0, sizeof(buffer));
 }

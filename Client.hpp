@@ -40,8 +40,6 @@ private:
 	struct hostent *hostp;
 	char data[100];
 
-	FILE* logfile;
-
 	string logfile_name;
 
 	string nickname;
@@ -52,8 +50,6 @@ public:
 	Client(string sip);
 	Client();
 	~Client();
-
-	void write_to_log(string line);
 
 	void run();
 

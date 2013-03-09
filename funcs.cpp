@@ -12,3 +12,9 @@ string get_time() {
 
     return buffer;
 }
+
+void write_to_log(string logfile_name, string line) {
+	FILE* logfile = fopen(logfile_name.c_str(), "at");
+	fprintf(logfile, "%s %s", get_time().c_str(), line.c_str());
+	fclose(logfile);
+}
