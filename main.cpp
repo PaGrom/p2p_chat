@@ -1,5 +1,11 @@
+#include <signal.h>
+
 #include "Client.hpp"
 #include "Server.hpp"
+
+void sigint(int signo) {
+    (void)signo;
+}
 
 void* run_client(void* par) {
 	Client* client = (Client*)par;
@@ -21,14 +27,38 @@ int main(int argc, char const *argv[]) {
 		client = new Client();
 
 	Server* server = new Server();
+
+	// Block the SIGINT signal. The threads will inherit the signal mask
+    // This will avoid them catching SIGINT instead of this thread
+	sigset_t sigset, oldset;
+	sigemptyset(&sigset);
+	sigaddset(&sigset, SIGINT);
+	pthread_sigmask(SIG_BLOCK, &sigset, &oldset);
 	
 	pthread_t t_client, t_server;
 	void* t_client_status;
 	void* t_server_status;
 
+	// Spawn the two threads
 	pthread_create(&t_server, NULL, &run_server, (void*)server);
 	sleep(1);
 	pthread_create(&t_client, NULL, &run_client, (void*)client);
+
+	// Install the signal handler for SIGINT
+    struct sigaction s;
+    s.sa_handler = sigint;
+    sigemptyset(&s.sa_mask);
+    s.sa_flags = 0;
+    sigaction(SIGINT, &s, NULL);
+
+    // Restore the old signal mask only for this thread
+    pthread_sigmask(SIG_SETMASK, &oldset, NULL);
+
+    // Wait for SIGINT to arrive
+    pause();
+
+	pthread_cancel(t_client);
+	pthread_cancel(t_server);
 
 	pthread_join(t_client, &t_client_status);
 	pthread_join(t_server, &t_server_status);
