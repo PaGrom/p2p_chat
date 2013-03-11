@@ -41,7 +41,7 @@ void Server::create_socket() {
 		ostringstream buff;
 		buff << "Server-socket() error: " << strerror(errno) << "\n";
 		write_to_log(logfile_name, buff.str());
-		printf("Error!! See %s\n", logfile_name.c_str());
+		cout << "Error!! See " << logfile_name << endl;
 		/* Just exit */
 		exit (-1);
 	}
@@ -60,7 +60,7 @@ void Server::allow_socket() {
 		ostringstream buff;
 		buff << "Server-setsockopt() error: " << strerror(errno) << "\n";
 		write_to_log(logfile_name, buff.str());
-		printf("Error!! See %s\n", logfile_name.c_str());
+		cout << "Error!! See " << logfile_name << endl;
 		close(sd);
 		exit (-1);
 	}
@@ -84,7 +84,7 @@ void Server::bind_socket() {
 		ostringstream buff;
 		buff << "Server-bind() error: " << strerror(errno) << "\n";
 		write_to_log(logfile_name, buff.str());
-		printf("Error!! See %s\n", logfile_name.c_str());
+		cout << "Error!! See " << logfile_name << endl;
 		/* Close the socket descriptor */
 		close(sd);
 		/* and just exit */
@@ -106,7 +106,7 @@ void Server::get_ready() {
 		ostringstream buff;
 		buff << "Server-listen() error: " << strerror(errno) << "\n";
 		write_to_log(logfile_name, buff.str());
-		printf("Error!! See %s\n", logfile_name.c_str());
+		cout << "Error!! See " << logfile_name << endl;
 		close(sd);
 		exit (-1);
 	}
@@ -128,7 +128,7 @@ void Server::accept_socket() {
 		ostringstream buff;
 		buff << "Server-accept() error: " << strerror(errno) << "\n";
 		write_to_log(logfile_name, buff.str());
-		printf("Error!! See %s\n", logfile_name.c_str());
+		cout << "Error!! See " << logfile_name << endl;
 		close(sd);
 		exit(-1);
 	}
@@ -170,14 +170,14 @@ void Server::get_ready_to_read() {
 				ostringstream buff;
 				buff << "Server-read() error: " << strerror(errno) << "\n";
 				write_to_log(logfile_name, buff.str());
-				printf("Error!! See %s\n", logfile_name.c_str());
+				cout << "Error!! See " << logfile_name << endl;
 				close(sd);
 				close(sd2);
 				exit (-1);
 			}
 			else if (rc == 0) {
 				write_to_log(logfile_name, "Client program has issued a close()\n");
-				printf("Error!! See %s\n", logfile_name.c_str());
+				cout << "Error!! See " << logfile_name << endl;
 				close(sd);
 				close(sd2);
 				exit(-1);
@@ -193,7 +193,7 @@ void Server::get_ready_to_read() {
 		ostringstream buff;
 		buff << "Server-select() error: " << strerror(errno) << "\n";
 		write_to_log(logfile_name, buff.str());
-		printf("Error!! See %s\n", logfile_name.c_str());
+		cout << "Error!! See " << logfile_name << endl;
 		close(sd);
 		close(sd2);
 		exit(-1);
@@ -201,14 +201,14 @@ void Server::get_ready_to_read() {
 	/* rc == 0 */
 	else {
 		write_to_log(logfile_name, "Server-select() timed out.\n");
-		printf("Error!! See %s\n", logfile_name.c_str());
+		cout << "Error!! See " << logfile_name << endl;
 		close(sd);
 		close(sd2);
 		exit(-1);
 	}
 	 
 	/* Shows the data */
-	printf(" %s %s: %s\n", get_time().c_str(), nickname.c_str(), buffer);
+	cout << " " << get_time() << " " << nickname << ": " << buffer << endl;
 }
 
 void Server::write_to_client_back() {
@@ -224,7 +224,7 @@ void Server::write_to_client_back() {
 		ostringstream buff;
 		buff << "Server-write() error: " << strerror(errno) << "\n";
 		write_to_log(logfile_name, buff.str());
-		printf("Error!! See %s\n", logfile_name.c_str());
+		cout << "Error!! See " << logfile_name << endl;
 		/* Get the error number. */
 		rc = getsockopt(sd2, SOL_SOCKET, SO_ERROR, &temp, &length);
 		if (rc == 0) {
@@ -234,7 +234,7 @@ void Server::write_to_client_back() {
 			buff.clear();
 			buff << "SO_ERROR was: " << strerror(errno) << "\n";
 			write_to_log(logfile_name, buff.str());
-			printf("Error!! See %s\n", logfile_name.c_str());
+			cout << "Error!! See " << logfile_name << endl;
 		}
 		else
 			write_to_log(logfile_name, "Server-write() is OK\n");
