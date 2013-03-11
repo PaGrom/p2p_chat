@@ -38,9 +38,9 @@ void Server::create_socket() {
 	/************************************************/
 	/* Get a socket descriptor */
 	if ((sd = socket(AF_INET, SOCK_STREAM, 0)) < 0) {
-		char buff[100];
-		snprintf(buff, sizeof(buff), "Server-socket() error: %s\n", strerror(errno));
-		write_to_log(logfile_name, buff);
+		ostringstream buff;
+		buff << "Server-socket() error: " << strerror(errno) << "\n";
+		write_to_log(logfile_name, buff.str());
 		printf("Error!! See %s\n", logfile_name.c_str());
 		/* Just exit */
 		exit (-1);
@@ -57,9 +57,9 @@ void Server::allow_socket() {
 	/***********************************************/
 	/* Allow socket descriptor to be reusable */
 	if ((rc = setsockopt(sd, SOL_SOCKET, SO_REUSEADDR, (char *)&on, sizeof(on))) < 0) {
-		char buff[100];
-		snprintf(buff, sizeof(buff), "Server-setsockopt() error: %s\n", strerror(errno));
-		write_to_log(logfile_name, buff);
+		ostringstream buff;
+		buff << "Server-setsockopt() error: " << strerror(errno) << "\n";
+		write_to_log(logfile_name, buff.str());
 		printf("Error!! See %s\n", logfile_name.c_str());
 		close(sd);
 		exit (-1);
@@ -81,9 +81,9 @@ void Server::bind_socket() {
 	/* s_addr to zero, which allows the system to */
 	/* connect to any client that used port 3005. */
 	if ((rc = bind(sd, (struct sockaddr *)&serveraddr, sizeof(serveraddr))) < 0) {
-		char buff[100];
-		snprintf(buff, sizeof(buff), "Server-bind() error: %s\n", strerror(errno));
-		write_to_log(logfile_name, buff);
+		ostringstream buff;
+		buff << "Server-bind() error: " << strerror(errno) << "\n";
+		write_to_log(logfile_name, buff.str());
 		printf("Error!! See %s\n", logfile_name.c_str());
 		/* Close the socket descriptor */
 		close(sd);
@@ -103,9 +103,9 @@ void Server::get_ready() {
 	/*************************************************/
 	/* Up to 10 clients can be queued */
 	if ((rc = listen(sd, 10)) < 0) {
-		char buff[100];
-		snprintf(buff, sizeof(buff), "Server-listen() error: %s\n", strerror(errno));
-		write_to_log(logfile_name, buff);
+		ostringstream buff;
+		buff << "Server-listen() error: " << strerror(errno) << "\n";
+		write_to_log(logfile_name, buff.str());
 		printf("Error!! See %s\n", logfile_name.c_str());
 		close(sd);
 		exit (-1);
@@ -125,9 +125,9 @@ void Server::accept_socket() {
 	/* accept() the incoming connection request. */
 	unsigned int sin_size = sizeof(struct sockaddr_in);
 	if ((sd2 = accept(sd, (struct sockaddr *)&their_addr, &sin_size)) < 0) {
-		char buff[100];
-		snprintf(buff, sizeof(buff), "Server-accept() error: %s\n", strerror(errno));
-		write_to_log(logfile_name, buff);
+		ostringstream buff;
+		buff << "Server-accept() error: " << strerror(errno) << "\n";
+		write_to_log(logfile_name, buff.str());
 		printf("Error!! See %s\n", logfile_name.c_str());
 		close(sd);
 		exit(-1);
@@ -167,9 +167,9 @@ void Server::get_ready_to_read() {
 			/* read() from client */
 			rc = read(sd2, &buffer[totalcnt], (BufferLength - totalcnt));
 			if (rc < 0) {
-				char buff[100];
-				snprintf(buff, sizeof(buff), "Server-read() error: %s\n", strerror(errno));
-				write_to_log(logfile_name, buff);
+				ostringstream buff;
+				buff << "Server-read() error: " << strerror(errno) << "\n";
+				write_to_log(logfile_name, buff.str());
 				printf("Error!! See %s\n", logfile_name.c_str());
 				close(sd);
 				close(sd2);
@@ -190,9 +190,9 @@ void Server::get_ready_to_read() {
 		}
 	}
 	else if (rc < 0) {
-		char buff[100];
-		snprintf(buff, sizeof(buff), "Server-select() error: %s\n", strerror(errno));
-		write_to_log(logfile_name, buff);
+		ostringstream buff;
+		buff << "Server-select() error: " << strerror(errno) << "\n";
+		write_to_log(logfile_name, buff.str());
 		printf("Error!! See %s\n", logfile_name.c_str());
 		close(sd);
 		close(sd2);
@@ -221,9 +221,9 @@ void Server::write_to_client_back() {
 	write_to_log(logfile_name, "Server-Echoing back to client...\n");
 	rc = write(sd2, buffer, totalcnt);
 	if (rc != totalcnt) {
-		char buff[100];
-		snprintf(buff, sizeof(buff), "Server-write() error: %s\n", strerror(errno));
-		write_to_log(logfile_name, buff);
+		ostringstream buff;
+		buff << "Server-write() error: " << strerror(errno) << "\n";
+		write_to_log(logfile_name, buff.str());
 		printf("Error!! See %s\n", logfile_name.c_str());
 		/* Get the error number. */
 		rc = getsockopt(sd2, SOL_SOCKET, SO_ERROR, &temp, &length);
@@ -231,9 +231,9 @@ void Server::write_to_client_back() {
 			/* Print out the asynchronously */
 			/* received error. */
 			errno = temp;
-			memset(buff, 0, sizeof(buff));
-			snprintf(buff, sizeof(buff), "SO_ERROR was: %s\n", strerror(errno));
-			write_to_log(logfile_name, buff);
+			buff.clear();
+			buff << "SO_ERROR was: " << strerror(errno) << "\n";
+			write_to_log(logfile_name, buff.str());
 			printf("Error!! See %s\n", logfile_name.c_str());
 		}
 		else

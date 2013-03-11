@@ -11,6 +11,7 @@
 #include <errno.h>
 #include <unistd.h>
 #include <iostream>
+#include <sstream>
 
 #include "funcs.hpp"
 
