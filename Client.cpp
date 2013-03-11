@@ -45,9 +45,9 @@ void Client::create_socket() {
 	/******************************************/
 	/* get a socket descriptor */
 	if ((sd = socket(AF_INET, SOCK_STREAM, 0)) < 0) {
-		char buff[100];
-		snprintf(buff, sizeof(buff), "Client-socket() error: %s\n", strerror(errno));
-		write_to_log(logfile_name, buff);
+		ostringstream buff;
+		buff << "Client-socket() error: " << strerror(errno) << "\n";
+		write_to_log(logfile_name, buff.str());
 		printf("Error!! See %s\n", logfile_name.c_str());
 		exit(-1);
 	}
@@ -71,9 +71,9 @@ void Client::get_host_address() {
 		if (hostp == NULL) {
 			/* h_errno is usually defined */
 			/* in netdb.h */
-			char buff[100];
-			snprintf(buff, sizeof(buff), "HOST NOT FOUND --> h_errno = %d\n",h_errno);
-			write_to_log(logfile_name, buff);
+			ostringstream buff;
+			buff << "HOST NOT FOUND --> h_errno = " << h_errno << "\n";
+			write_to_log(logfile_name, buff.str());
 			write_to_log(logfile_name, "Command usage: <programm name> <server IP>\n");
 			printf("Error!! See %s\n", logfile_name.c_str());
 			close(sd);
@@ -89,18 +89,17 @@ void Client::connect_to_server() {
 	/* connection to the server. */
 	/***********************************************/
 	/* connect() to server. */
+	ostringstream buff;
 	if ((rc = connect(sd, (struct sockaddr *)&serveraddr, sizeof(serveraddr))) < 0) {
-		char buff[100];
-		snprintf(buff, sizeof(buff), "Client-connect() error: %s\n", strerror(errno));
-		write_to_log(logfile_name, buff);
+		buff << "Client-connect() error: " << strerror(errno) << "\n";
+		write_to_log(logfile_name, buff.str());
 		printf("Error!! See %s\n", logfile_name.c_str());
 		close(sd);
 		exit(-1);
 	}
 	else {
-		char buff[100];
-		snprintf(buff, sizeof(buff), "Connection with %s established...\n", server.c_str());
-		write_to_log(logfile_name, buff);
+		buff << "Connection with " << server << " established...\n";
+		write_to_log(logfile_name, buff.str());
 	}
 }
 
@@ -117,17 +116,17 @@ void Client::write_to_server() {
 	rc = write(sd, data, sizeof(data));
 	 
 	if (rc < 0) {
-		char buff[100];
-		snprintf(buff, sizeof(buff), "Client-write() error: %s\n", strerror(errno));
-		write_to_log(logfile_name, buff);
+		ostringstream buff;
+		buff << "Client-write() error: " << strerror(errno) << "\n";
+		write_to_log(logfile_name, buff.str());
 		printf("Error!! See %s\n", logfile_name.c_str());
 		rc = getsockopt(sd, SOL_SOCKET, SO_ERROR, &temp, &length);
 		if (rc == 0) {
 			/* Print out the asynchronously received error. */
 			errno = temp;
-			memset(buff, 0, sizeof(buff));
-			snprintf(buff, sizeof(buff), "SO_ERROR was: %s\n", strerror(errno));
-			write_to_log(logfile_name, buff);
+			buff.clear();
+			buff << "SO_ERROR was: " << strerror(errno) << "\n";
+			write_to_log(logfile_name, buff.str());
 		}
 		close(sd);
 		exit(-1);
@@ -149,9 +148,9 @@ void Client::wait_server_echo_back() {
 		rc = read(sd, &buffer[totalcnt], BufferLength-totalcnt);
 
 		if (rc < 0) {
-			char buff[100];
-			snprintf(buff, sizeof(buff), "Client-read() error: %s\n", strerror(errno));
-			write_to_log(logfile_name, buff);
+			ostringstream buff;
+			buff << "Client-read() error: " << strerror(errno) << "\n";
+			write_to_log(logfile_name, buff.str());
 			printf("Error!! See %s\n", logfile_name.c_str());
 			close(sd);
 			exit(-1);
