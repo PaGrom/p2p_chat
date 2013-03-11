@@ -112,7 +112,8 @@ void Client::write_to_server() {
 	sleep(1); //wait server
 	cout << " > ";
 	cin >> data;
-	std::cout << "\033[1A";
+	cout << "\033[1A";
+	cout << " " << get_time() << " " << nickname << ": " << data << endl;	
 	
 	rc = write(sd, data, sizeof(data));
 	 
@@ -133,6 +134,8 @@ void Client::write_to_server() {
 		exit(-1);
 	}
 	else {
+		cout << "\033[1A";
+		cout << "*" << get_time() << " " << nickname << ": " << data << endl;
 		write_to_log(logfile_name, "Client-write() is OK\n");
 		write_to_log(logfile_name, "String successfully sent!\n");
 		write_to_log(logfile_name, "Waiting the server to echo back...\n");
@@ -167,7 +170,6 @@ void Client::wait_server_echo_back() {
 	}
 
 	write_to_log(logfile_name, "Client-read() is OK\n");
-	cout << "*" << get_time() << " " << nickname << ": " << data << endl;
 	memset(buffer, 0, sizeof(buffer));
 }
 
