@@ -48,7 +48,7 @@ void Client::create_socket() {
 		ostringstream buff;
 		buff << "Client-socket() error: " << strerror(errno) << "\n";
 		write_to_log(logfile_name, buff.str());
-		printf("Error!! See %s\n", logfile_name.c_str());
+		cout << "Error!! See " << logfile_name << endl;
 		exit(-1);
 	}
 	else
@@ -75,7 +75,7 @@ void Client::get_host_address() {
 			buff << "HOST NOT FOUND --> h_errno = " << h_errno << "\n";
 			write_to_log(logfile_name, buff.str());
 			write_to_log(logfile_name, "Command usage: <programm name> <server IP>\n");
-			printf("Error!! See %s\n", logfile_name.c_str());
+			cout << "Error!! See " << logfile_name << endl;
 			close(sd);
 			exit(-1);
 		}
@@ -93,7 +93,7 @@ void Client::connect_to_server() {
 	if ((rc = connect(sd, (struct sockaddr *)&serveraddr, sizeof(serveraddr))) < 0) {
 		buff << "Client-connect() error: " << strerror(errno) << "\n";
 		write_to_log(logfile_name, buff.str());
-		printf("Error!! See %s\n", logfile_name.c_str());
+		cout << "Error!! See " << logfile_name << endl;
 		close(sd);
 		exit(-1);
 	}
@@ -109,7 +109,8 @@ void Client::write_to_server() {
 	/*********************************************/
 	/* Write() some string to the server. */
 
-	printf(" > ");
+	sleep(1); //wait server
+	cout << " > ";
 	cin >> data;
 	std::cout << "\033[1A";
 	
@@ -119,7 +120,7 @@ void Client::write_to_server() {
 		ostringstream buff;
 		buff << "Client-write() error: " << strerror(errno) << "\n";
 		write_to_log(logfile_name, buff.str());
-		printf("Error!! See %s\n", logfile_name.c_str());
+		cout << "Error!! See " << logfile_name << endl;
 		rc = getsockopt(sd, SOL_SOCKET, SO_ERROR, &temp, &length);
 		if (rc == 0) {
 			/* Print out the asynchronously received error. */
@@ -151,13 +152,13 @@ void Client::wait_server_echo_back() {
 			ostringstream buff;
 			buff << "Client-read() error: " << strerror(errno) << "\n";
 			write_to_log(logfile_name, buff.str());
-			printf("Error!! See %s\n", logfile_name.c_str());
+			cout << "Error!! See " << logfile_name << endl;
 			close(sd);
 			exit(-1);
 		}
 		else if (rc == 0) {
 			write_to_log(logfile_name, "Server program has issued a close()\n");
-			printf("Error!! See %s\n", logfile_name.c_str());
+			cout << "Error!! See " << logfile_name << endl;
 			close(sd);
 			exit(-1);
 		}
@@ -166,7 +167,7 @@ void Client::wait_server_echo_back() {
 	}
 
 	write_to_log(logfile_name, "Client-read() is OK\n");
-	printf("*%s %s: %s\n", get_time().c_str(), nickname.c_str(), data);
+	cout << "*" << get_time() << " " << nickname << ": " << data << endl;
 	memset(buffer, 0, sizeof(buffer));
 }
 
@@ -180,6 +181,6 @@ void Client::close_connect() {
 }
 
 string Client::get_server() {
-	printf("Server: %s\n", server.c_str());
+	cout << "Server: " << server << endl;
 	return server;
 }
