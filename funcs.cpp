@@ -14,7 +14,8 @@ string get_time() {
 }
 
 void write_to_log(string logfile_name, string line) {
-	FILE* logfile = fopen(logfile_name.c_str(), "at");
-	fprintf(logfile, "%s %s", get_time().c_str(), line.c_str());
-	fclose(logfile);
+	// Open logfile for writing at the end
+	ofstream logfile(logfile_name.c_str(), ios::app);
+	logfile << get_time() << " " << line;
+	logfile.close();
 }
