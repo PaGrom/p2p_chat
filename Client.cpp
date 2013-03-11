@@ -22,17 +22,38 @@ Client::Client() : server("127.0.0.1") {
 Client::~Client() {}
 
 void Client::run() {
-	write_to_log(logfile_name, "Start...\n");
-	create_socket();
-	get_host_address();
-	connect_to_server();
 
 	while (true) {
-		write_to_server();
-		wait_server_echo_back();
+		cout << " > ";
+		cin >> data;
+		cout << "\033[1A";
+		cout << " " << get_time() << " " << nickname << ": " << data << endl;
+		string dt = data;
+		if (dt.find("/") == 0) {
+			parse_command();
+			continue;
+		}
+		
+		if (sd) {
+			write_to_server();
+			cout << "\033[1A";
+			cout << "*" << get_time() << " " << nickname << ": " << data << endl;
+			wait_server_echo_back();
+		}
+		else
+			cout << "Warning! Not connected!" << endl;
 	}
 
 	close_connect();
+}
+
+void Client::parse_command() {
+	string dt = data;
+	if (dt.find("/connect") == 0) {
+		create_socket();
+		get_host_address();
+		connect_to_server();
+	}
 }
 
 void Client::create_socket() {
@@ -98,6 +119,7 @@ void Client::connect_to_server() {
 		exit(-1);
 	}
 	else {
+		cout << "Connection with " << server << " established...\n";
 		buff << "Connection with " << server << " established...\n";
 		write_to_log(logfile_name, buff.str());
 	}
@@ -110,11 +132,7 @@ void Client::write_to_server() {
 	/* Write() some string to the server. */
 
 	sleep(1); //wait server
-	cout << " > ";
-	cin >> data;
-	cout << "\033[1A";
-	cout << " " << get_time() << " " << nickname << ": " << data << endl;	
-	
+
 	rc = write(sd, data, sizeof(data));
 	 
 	if (rc < 0) {
@@ -134,8 +152,6 @@ void Client::write_to_server() {
 		exit(-1);
 	}
 	else {
-		cout << "\033[1A";
-		cout << "*" << get_time() << " " << nickname << ": " << data << endl;
 		write_to_log(logfile_name, "Client-write() is OK\n");
 		write_to_log(logfile_name, "String successfully sent!\n");
 		write_to_log(logfile_name, "Waiting the server to echo back...\n");
