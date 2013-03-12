@@ -54,6 +54,12 @@ void Client::parse_command() {
 		get_host_address();
 		connect_to_server();
 	}
+	if (dt.find("/exit") == 0) {
+		close_connect();
+		exit(0);
+	}
+	else
+		cout << "Wrong command!" << endl;
 }
 
 void Client::create_socket() {
