@@ -137,7 +137,9 @@ void Server::accept_socket() {
 	 
 	/*client IP*/
 	write_to_log(logfile_name, "Server-new socket, sd2 is OK...\n");
-	// printf("Got connection from the f***ing client: %d\n", inet_ntoa(their_addr.sin_addr));
+	ostringstream buff;
+	buff << "Got connection from " << inet_ntoa(their_addr.sin_addr) << endl;
+	write_to_log(logfile_name, buff.str());
 }
 
 void Server::get_ready_to_read() {
