@@ -2,7 +2,7 @@
 
 void Client::CommonInit() {
 	BufferLength = 100;
-	server_port = 3111;
+	server_port = 3112;
 
 	totalcnt = 0;
 
@@ -22,14 +22,14 @@ Client::Client() : server("127.0.0.1") {
 Client::~Client() {}
 
 void Client::run() {
-
+	write_to_log(logfile_name, "Start...\n");
 	while (true) {
 		cout << " > ";
 		cin >> data;
 		cout << "\033[1A";
 		cout << " " << get_time() << " " << nickname << ": " << data << endl;
-		string dt = data;
-		if (dt.find("/") == 0) {
+
+		if (data.find("/") == 0) {
 			parse_command();
 			continue;
 		}
@@ -38,7 +38,7 @@ void Client::run() {
 			write_to_server();
 			cout << "\033[1A";
 			cout << "*" << get_time() << " " << nickname << ": " << data << endl;
-			wait_server_echo_back();
+			// wait_server_echo_back();
 		}
 		else
 			cout << "Warning! Not connected!" << endl;
@@ -48,13 +48,11 @@ void Client::run() {
 }
 
 void Client::parse_command() {
-	string dt = data;
-	if (dt.find("/connect") == 0) {
+	if (data.find("/connect") == 0) {
 		create_socket();
 		get_host_address();
 		connect_to_server();
-	}
-	if (dt.find("/exit") == 0) {
+	} else if (data.find("/exit") == 0) {
 		close_connect();
 		exit(0);
 	}
@@ -139,7 +137,9 @@ void Client::write_to_server() {
 
 	sleep(1); //wait server
 
-	rc = write(sd, data, sizeof(data));
+	char* dt = (char*)data.c_str();
+
+	rc = write(sd, dt, sizeof(dt));
 	 
 	if (rc < 0) {
 		ostringstream buff;

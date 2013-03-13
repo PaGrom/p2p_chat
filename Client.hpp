@@ -40,7 +40,7 @@ private:
 	char temp;
 	int totalcnt;
 	struct hostent *hostp;
-	char data[100];
+	string data;
 
 	string logfile_name;
 
