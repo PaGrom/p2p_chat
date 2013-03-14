@@ -40,9 +40,13 @@ private:
 
 	string nickname;
 
+	string conf;
+
 public:
 	Server();
 	~Server();
+
+	void load_parameters();
 
 	void run();
 

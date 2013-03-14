@@ -2,16 +2,51 @@
 
 Server::Server() {
 	BufferLength = 100;
-	server_port = 3111;
 	totalcnt = 0;
 	on = 1;
 
 	logfile_name = "server.log";
 
-	nickname = "Server";
+	conf = "../server.conf";
+	load_parameters();
 }
 
 Server::~Server() {}
+
+void Server::load_parameters() {
+
+	ifstream file(conf.c_str());
+
+	stringstream is_file;
+
+	if (file) {
+		is_file << file.rdbuf();
+		file.close();
+	}
+	else {
+		ostringstream buff;
+		buff << "Config file error: " << strerror(errno) << "\n";
+		write_to_log(logfile_name, buff.str());
+		cout << "Error!! See " << logfile_name << endl;
+		/* Just exit */
+		exit (-1);
+	}
+
+	string line;
+	while (getline(is_file, line)) {
+		istringstream is_line(line);
+		string key;
+		if (getline(is_line, key, '=')) {
+			string value;
+			if (getline(is_line, value)) {
+				if (key == "server_port")
+					server_port = atoi(value.c_str());
+				else if (key == "nickname")
+					nickname = value;
+			}
+		}
+	}
+}
 
 void Server::run() {
 	write_to_log(logfile_name, "Start...\n");
@@ -23,7 +58,7 @@ void Server::run() {
 	
 	while (true) {
 		get_ready_to_read();
-		write_to_client_back();
+		// write_to_client_back();
 	}
 	
 	close_connect();
