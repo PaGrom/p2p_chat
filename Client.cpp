@@ -2,13 +2,13 @@
 
 void Client::CommonInit() {
 	BufferLength = 100;
-	server_port = 3112;
 
 	totalcnt = 0;
 
 	logfile_name = "client.log";
 
-	nickname = "PaGrom";
+	conf = "../client.conf";
+	load_parameters();
 }
 
 Client::Client(string sip) : server(sip) {
@@ -20,6 +20,41 @@ Client::Client() : server("127.0.0.1") {
 }
 
 Client::~Client() {}
+
+void Client::load_parameters() {
+
+	ifstream file(conf.c_str());
+
+	stringstream is_file;
+
+	if (file) {
+		is_file << file.rdbuf();
+		file.close();
+	}
+	else {
+		ostringstream buff;
+		buff << "Config file error: " << strerror(errno) << "\n";
+		write_to_log(logfile_name, buff.str());
+		cout << "Error!! See " << logfile_name << endl;
+		/* Just exit */
+		exit (-1);
+	}
+
+	string line;
+	while (getline(is_file, line)) {
+		istringstream is_line(line);
+		string key;
+		if (getline(is_line, key, '=')) {
+			string value;
+			if (getline(is_line, value)) {
+				if (key == "server_port")
+					server_port = atoi(value.c_str());
+				else if (key == "nickname")
+					nickname = value;
+			}
+		}
+	}
+}
 
 void Client::run() {
 	write_to_log(logfile_name, "Start...\n");

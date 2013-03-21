@@ -46,12 +46,16 @@ private:
 
 	string nickname;
 
+	string conf;
+
 	void CommonInit();
 
 public:
 	Client(string sip);
 	Client();
 	~Client();
+
+	void load_parameters();
 
 	void run();
 
