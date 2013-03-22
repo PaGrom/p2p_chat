@@ -16,6 +16,9 @@
 #include <iostream>
 #include <sstream>
 
+#include <vector>
+#include <iterator>
+
 
 #include "funcs.hpp"
 

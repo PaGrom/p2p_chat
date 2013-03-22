@@ -83,7 +83,11 @@ void Client::run() {
 }
 
 void Client::parse_command() {
+	
 	if (data.find("/connect") == 0) {
+		vector<string> vec = split(data);
+		if (vec.size() > 2)
+			server = vec.at(1);
 		create_socket();
 		get_host_address();
 		connect_to_server();
