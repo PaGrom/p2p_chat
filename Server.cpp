@@ -222,6 +222,8 @@ void Server::get_ready_to_read() {
 			else {
 				totalcnt += rc;
 				write_to_log(logfile_name, "Server-read() is OK\n");
+				/* Shows the data */
+				cout << " " << get_time() << " " << nickname << ": " << buffer << endl;
 			}
 			 
 		}
@@ -243,9 +245,6 @@ void Server::get_ready_to_read() {
 		close(sd2);
 		exit(-1);
 	}
-	 
-	/* Shows the data */
-	cout << " " << get_time() << " " << nickname << ": " << buffer << endl;
 }
 
 void Server::write_to_client_back() {
