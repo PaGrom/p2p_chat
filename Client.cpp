@@ -60,7 +60,7 @@ void Client::run() {
 	write_to_log(logfile_name, "Start...\n");
 	while (true) {
 		cout << " > ";
-		cin >> data;
+		getline(cin, data);
 		cout << "\033[1A";
 		cout << " " << get_time() << " " << nickname << ": " << data << endl;
 
