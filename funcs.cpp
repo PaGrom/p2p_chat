@@ -19,3 +19,16 @@ void write_to_log(string logfile_name, string line) {
 	logfile << get_time() << " " << line;
 	logfile.close();
 }
+
+vector<string> split(string s) {
+	vector<string> vec;
+	istringstream iss(s);
+	
+	while (iss) {
+		string sub;
+        iss >> sub;
+        vec.push_back(sub);
+	}
+	
+	return vec;
+}
