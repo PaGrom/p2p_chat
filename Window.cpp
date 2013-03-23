@@ -49,29 +49,10 @@ string Window::read() {
 	return input;
 }
 
-int main(int argc, char const *argv[])
-{
-	setlocale(LC_ALL, "");
-	initscr();
-	cbreak();
-	noecho();
-	keypad(stdscr, TRUE);
+void Window::write(string line) {
+	wmove(win, lines + 1, 1);
+	waddstr(win, line.c_str());
+	lines++;
 
-	int ymax, xmax, height;
-	getmaxyx(stdscr, ymax, xmax);
-
-	Window *output = new Window("output", ymax - 5, xmax, 0, 0);
-	Window *input = new Window("input", 5, xmax, ymax - 5, 0);
-
-	output->refresh_win();
-	input->refresh_win();
-
-	while (1) {
-		string s = input->read();
-		// write_win(&output, s);
-	}
-
-	endwin();
-
-	return 0;
+	refresh_win();
 }

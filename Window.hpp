@@ -22,6 +22,7 @@ public:
 
 	void refresh_win();
 	string read();
+	void write(string line);
 };
 
 #endif
