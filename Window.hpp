@@ -21,6 +21,7 @@ public:
 	~Window();
 
 	void refresh_win();
+	string read();
 };
 
 #endif

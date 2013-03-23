@@ -16,6 +16,39 @@ void Window::refresh_win() {
 	wrefresh(win);
 }
 
+string Window::read() {
+	int c = 0;
+	int pos = 0;
+	string input = "";
+
+	curs_set(2);
+
+	while (c != '\n') {
+		c = getch();
+		if (c == KEY_BACKSPACE) {
+			noecho();  
+			nocbreak();
+			int x, y;
+			getyx(win, y, x);
+			move(y, x - 1);
+			delch(); 
+			cbreak();  
+			refresh();
+			continue;
+		}
+		if (c == '\n' || (c > 31 && c < 126)) {
+			mvwaddch(win, 1, ++pos, c);
+			input += c;
+			refresh_win();
+		}
+	}
+
+	wclear(win);
+	refresh_win();
+
+	return input;
+}
+
 int main(int argc, char const *argv[])
 {
 	setlocale(LC_ALL, "");
@@ -32,6 +65,11 @@ int main(int argc, char const *argv[])
 
 	output->refresh_win();
 	input->refresh_win();
+
+	while (1) {
+		string s = input->read();
+		// write_win(&output, s);
+	}
 
 	endwin();
 
