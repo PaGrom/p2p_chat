@@ -1,5 +1,6 @@
 #include <signal.h>
 
+#include "Window.hpp"
 #include "Client.hpp"
 #include "Server.hpp"
 
@@ -18,6 +19,21 @@ void* run_server(void* par) {
 }
 
 int main(int argc, char const *argv[]) {
+	setlocale(LC_ALL, "");
+	initscr();
+	cbreak();
+	noecho();
+	keypad(stdscr, TRUE);
+
+	int ymax, xmax, height;
+	getmaxyx(stdscr, ymax, xmax);
+
+	Window *output = new Window("output", ymax - 5, xmax, 0, 0);
+	Window *input = new Window("input", 5, xmax, ymax - 5, 0);
+
+	output->refresh_win();
+	input->refresh_win();
+
 	/*If the server hostname is supplied*/
 	Client* client;
 	if(argc > 1)
@@ -62,6 +78,8 @@ int main(int argc, char const *argv[]) {
 
 	pthread_join(t_client, &t_client_status);
 	pthread_join(t_server, &t_server_status);
+
+	endwin();
 
 	return 0;
 }

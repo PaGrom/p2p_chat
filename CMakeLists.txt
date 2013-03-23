@@ -4,11 +4,15 @@ project(p2p_chat)
 
 set(SOURCE_EXE main.cpp)
 
+set(WINDOW Window.cpp)
+
 set(SERVER Server.cpp)
 
 set(CLIENT Client.cpp)
 
 set(FUNCS funcs.cpp)
+
+add_library(window STATIC ${WINDOW})
 
 add_library(server STATIC ${SERVER})
 
@@ -18,6 +22,9 @@ add_library(funcs STATIC ${FUNCS})
 
 add_executable(p2p_chat ${SOURCE_EXE})
 
+SET(CURSES_NEED_NCURSES TRUE)
+FIND_PACKAGE(Curses)
+
 find_package(Threads)
 
-target_link_libraries(p2p_chat server client funcs ${CMAKE_THREAD_LIBS_INIT})
+target_link_libraries(p2p_chat window server client funcs ${CMAKE_THREAD_LIBS_INIT} -lncursesw)

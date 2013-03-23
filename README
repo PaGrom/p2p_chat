@@ -1,5 +1,8 @@
 Simple P2P chat
 
+Dependecies:
+	sudo apt-get install libncursesw5-dev
+
 Compile:
 	1. mkdir build
 	2. cd build
