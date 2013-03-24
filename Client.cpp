@@ -67,24 +67,22 @@ void Client::load_parameters() {
 void Client::run() {
 	write_to_log(logfile_name, "Start...\n");
 	while (true) {
-		cout << " > ";
-		getline(cin, data);
-		cout << "\033[1A";
-		cout << " " << get_time() << " " << nickname << ": " << data << endl;
+
+		data = input_win->read();
+		ostringstream buff;
+		buff << " " << get_time() << " " << nickname << ": " << data;
+		output_win->write(buff.str());
 
 		if (data.find("/") == 0) {
 			parse_command();
 			continue;
 		}
 		
-		if (sd) {
-			write_to_server();
-			cout << "\033[1A";
-			cout << "*" << get_time() << " " << nickname << ": " << data << endl;
-			// wait_server_echo_back();
+		if (!sd) {
+			buff.str("");
+			buff << " Warning! Not connected!\n";
+			output_win->write(buff.str());
 		}
-		else
-			cout << "Warning! Not connected!" << endl;
 	}
 
 	close_connect();
