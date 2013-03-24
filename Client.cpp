@@ -43,9 +43,11 @@ void Client::load_parameters() {
 		ostringstream buff;
 		buff << "Config file error: " << strerror(errno) << "\n";
 		write_to_log(logfile_name, buff.str());
-		cout << "Error!! See " << logfile_name << endl;
+		buff.str("");
+		buff << " Error!! See " << logfile_name << "\n";
+		output_win->write(buff.str());
 		/* Just exit */
-		exit (-1);
+		exit(-1);
 	}
 
 	string line;
