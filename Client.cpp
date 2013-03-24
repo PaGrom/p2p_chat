@@ -201,12 +201,14 @@ void Client::write_to_server() {
 		ostringstream buff;
 		buff << "Client-write() error: " << strerror(errno) << "\n";
 		write_to_log(logfile_name, buff.str());
-		cout << "Error!! See " << logfile_name << endl;
+		buff.str("");
+		buff << " Error!! See " << logfile_name << "\n";
+		output_win->write(buff.str());
 		rc = getsockopt(sd, SOL_SOCKET, SO_ERROR, &temp, &length);
 		if (rc == 0) {
 			/* Print out the asynchronously received error. */
 			errno = temp;
-			buff.clear();
+			buff.str("");
 			buff << "SO_ERROR was: " << strerror(errno) << "\n";
 			write_to_log(logfile_name, buff.str());
 		}
