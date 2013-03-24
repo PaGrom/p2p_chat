@@ -15,6 +15,7 @@
 #include <sstream>
 
 #include "funcs.hpp"
+#include "Window.hpp"
 
 using namespace std;
 
@@ -42,9 +43,13 @@ private:
 
 	string conf;
 
+	Window *win;
+
 public:
 	Server();
 	~Server();
+
+	void get_window(Window *w);
 
 	void load_parameters();
 

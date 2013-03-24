@@ -46,6 +46,8 @@ int main(int argc, char const *argv[]) {
 
 	Server* server = new Server();
 
+	server->get_window(output);
+
 	// Block the SIGINT signal. The threads will inherit the signal mask
     // This will avoid them catching SIGINT instead of this thread
 	sigset_t sigset, oldset;

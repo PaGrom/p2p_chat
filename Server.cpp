@@ -13,6 +13,10 @@ Server::Server() {
 
 Server::~Server() {}
 
+void Server::get_window(Window *w) {
+	win = w;
+}
+
 void Server::load_parameters() {
 
 	ifstream file(conf.c_str());
