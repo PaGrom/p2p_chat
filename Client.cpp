@@ -152,7 +152,9 @@ void Client::get_host_address() {
 			buff << "HOST NOT FOUND --> h_errno = " << h_errno << "\n";
 			write_to_log(logfile_name, buff.str());
 			write_to_log(logfile_name, "Command usage: <programm name> <server IP>\n");
-			cout << "Error!! See " << logfile_name << endl;
+			buff.str("");
+			buff << " Error!! See " << logfile_name << "\n";
+			output_win->write(buff.str());
 			close(sd);
 			exit(-1);
 		}
