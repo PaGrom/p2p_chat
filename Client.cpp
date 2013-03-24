@@ -267,6 +267,7 @@ void Client::close_connect() {
 }
 
 string Client::get_server() {
-	cout << "Server: " << server << endl;
+	ostringstream buff;
+	buff << " Server: " << server << "\n";
 	return server;
 }
