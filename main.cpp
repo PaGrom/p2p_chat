@@ -42,7 +42,8 @@ int main(int argc, char const *argv[]) {
 	/*Use the default server name or IP*/
 		client = new Client();
 
-	client->get_window(input);
+	client->get_input_window(input);
+	client->get_output_window(output);
 
 	Server* server = new Server();
 

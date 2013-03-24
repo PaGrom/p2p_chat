@@ -52,7 +52,9 @@ private:
 
 	string conf;
 
-	Window *win;
+	Window *input_win;
+
+	Window *output_win;
 
 	void CommonInit();
 
@@ -61,7 +63,8 @@ public:
 	Client();
 	~Client();
 
-	void get_window(Window *w);
+	void get_input_window(Window *w);
+	void get_output_window(Window *w);
 
 	void load_parameters();
 

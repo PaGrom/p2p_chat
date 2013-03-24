@@ -21,8 +21,12 @@ Client::Client() : server("127.0.0.1") {
 
 Client::~Client() {}
 
-void Client::get_window(Window *w) {
-	win = w;
+void Client::get_input_window(Window *w) {
+	input_win = w;
+}
+
+void Client::get_output_window(Window *w) {
+	output_win = w;
 }
 
 void Client::load_parameters() {
