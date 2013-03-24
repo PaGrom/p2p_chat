@@ -231,17 +231,21 @@ void Client::wait_server_echo_back() {
 		/* Read data from the server. */
 		rc = read(sd, &buffer[totalcnt], BufferLength-totalcnt);
 
+		ostringstream buff;
 		if (rc < 0) {
-			ostringstream buff;
 			buff << "Client-read() error: " << strerror(errno) << "\n";
 			write_to_log(logfile_name, buff.str());
-			cout << "Error!! See " << logfile_name << endl;
+			buff.str("");
+			buff << " Error!! See " << logfile_name << "\n";
+			output_win->write(buff.str());
 			close(sd);
 			exit(-1);
 		}
 		else if (rc == 0) {
 			write_to_log(logfile_name, "Server program has issued a close()\n");
-			cout << "Error!! See " << logfile_name << endl;
+			buff.str("");
+			buff << " Error!! See " << logfile_name << "\n";
+			output_win->write(buff.str());
 			close(sd);
 			exit(-1);
 		}
