@@ -42,6 +42,8 @@ int main(int argc, char const *argv[]) {
 	/*Use the default server name or IP*/
 		client = new Client();
 
+	client->get_window(input);
+
 	Server* server = new Server();
 
 	// Block the SIGINT signal. The threads will inherit the signal mask

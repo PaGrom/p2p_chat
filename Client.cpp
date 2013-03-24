@@ -21,6 +21,10 @@ Client::Client() : server("127.0.0.1") {
 
 Client::~Client() {}
 
+void Client::get_window(Window *w) {
+	win = w;
+}
+
 void Client::load_parameters() {
 
 	ifstream file(conf.c_str());

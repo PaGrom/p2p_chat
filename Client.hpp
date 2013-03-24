@@ -21,6 +21,7 @@
 
 
 #include "funcs.hpp"
+#include "Window.hpp"
 
 using namespace std;
 
@@ -51,12 +52,16 @@ private:
 
 	string conf;
 
+	Window *win;
+
 	void CommonInit();
 
 public:
 	Client(string sip);
 	Client();
 	~Client();
+
+	void get_window(Window *w);
 
 	void load_parameters();
 
