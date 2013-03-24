@@ -103,8 +103,11 @@ void Client::parse_command() {
 		close_connect();
 		exit(0);
 	}
-	else
-		cout << "Wrong command!" << endl;
+	else {
+		ostringstream buff;
+		buff << " Wrong command!\n";
+		output_win->write(buff.str());
+	}
 }
 
 void Client::create_socket() {
