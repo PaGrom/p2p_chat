@@ -172,14 +172,16 @@ void Client::connect_to_server() {
 	if ((rc = connect(sd, (struct sockaddr *)&serveraddr, sizeof(serveraddr))) < 0) {
 		buff << "Client-connect() error: " << strerror(errno) << "\n";
 		write_to_log(logfile_name, buff.str());
-		cout << "Error!! See " << logfile_name << endl;
+		buff.str("");
+		buff << " Error!! See " << logfile_name << "\n";
+		output_win->write(buff.str());
 		close(sd);
 		exit(-1);
 	}
 	else {
-		cout << "Connection with " << server << " established...\n";
-		buff << "Connection with " << server << " established...\n";
+		buff << " Connection with " << server << " established...\n";
 		write_to_log(logfile_name, buff.str());
+		output_win->write(buff.str());
 	}
 }
 
