@@ -80,7 +80,9 @@ void Client::run() {
 			continue;
 		}
 		
-		if (!sd) {
+		if (sd)
+			write_to_server();
+		else {
 			buff.str("");
 			buff << " Warning! Not connected!\n";
 			output_win->write(buff.str());
@@ -190,7 +192,7 @@ void Client::write_to_server() {
 	/* the write() function. */
 	/*********************************************/
 	/* Write() some string to the server. */
-
+	write_to_log(logfile_name, "Client-Writing...\n");
 	sleep(1); //wait server
 
 	char* dt = (char*)data.c_str();
