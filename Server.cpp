@@ -172,12 +172,14 @@ void Server::accept_socket() {
 	/* - Attempts to connect to the specified port */
 	/***********************************************/
 	/* accept() the incoming connection request. */
+	ostringstream buff;
 	unsigned int sin_size = sizeof(struct sockaddr_in);
 	if ((sd2 = accept(sd, (struct sockaddr *)&their_addr, &sin_size)) < 0) {
-		ostringstream buff;
 		buff << "Server-accept() error: " << strerror(errno) << "\n";
 		write_to_log(logfile_name, buff.str());
-		cout << "Error!! See " << logfile_name << endl;
+		buff.str("");
+		buff << " Error!! See " << logfile_name << "\n";
+		win->write(buff.str());
 		close(sd);
 		exit(-1);
 	}
@@ -186,7 +188,7 @@ void Server::accept_socket() {
 	 
 	/*client IP*/
 	write_to_log(logfile_name, "Server-new socket, sd2 is OK...\n");
-	ostringstream buff;
+	buff.str("");
 	buff << "Got connection from " << inet_ntoa(their_addr.sin_addr) << endl;
 	write_to_log(logfile_name, buff.str());
 }
