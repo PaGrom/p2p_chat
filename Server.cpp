@@ -202,6 +202,7 @@ void Server::get_ready_to_read() {
 	/***********************************************/
 	/* Wait for up to 15 seconds on */
 	/* select() for data to be read. */
+	ostringstream buff;
 	timeout.tv_sec = 3600;
 	timeout.tv_usec = 0;
 	FD_ZERO(&read_fd);
@@ -220,17 +221,20 @@ void Server::get_ready_to_read() {
 			/* read() from client */
 			rc = read(sd2, &buffer[totalcnt], (BufferLength - totalcnt));
 			if (rc < 0) {
-				ostringstream buff;
 				buff << "Server-read() error: " << strerror(errno) << "\n";
 				write_to_log(logfile_name, buff.str());
-				cout << "Error!! See " << logfile_name << endl;
+				buff.str("");
+				buff << " Error!! See " << logfile_name << "\n";
+				win->write(buff.str());
 				close(sd);
 				close(sd2);
 				exit (-1);
 			}
 			else if (rc == 0) {
 				write_to_log(logfile_name, "Client program has issued a close()\n");
-				cout << "Error!! See " << logfile_name << endl;
+				buff.str("");
+				buff << " Error!! See " << logfile_name << "\n";
+				win->write(buff.str());
 				close(sd);
 				close(sd2);
 				exit(-1);
@@ -239,16 +243,20 @@ void Server::get_ready_to_read() {
 				totalcnt += rc;
 				write_to_log(logfile_name, "Server-read() is OK\n");
 				/* Shows the data */
-				cout << " " << get_time() << " " << nickname << ": " << buffer << endl;
+				buff.str("");
+				buff << " " << get_time() << " " << nickname << ": " << buffer;
+				win->write(buff.str());
 			}
 			 
 		}
 	}
 	else if (rc < 0) {
-		ostringstream buff;
+		buff.str("");
 		buff << "Server-select() error: " << strerror(errno) << "\n";
 		write_to_log(logfile_name, buff.str());
-		cout << "Error!! See " << logfile_name << endl;
+		buff.str("");
+		buff << " Error!! See " << logfile_name << "\n";
+		win->write(buff.str());
 		close(sd);
 		close(sd2);
 		exit(-1);
@@ -256,7 +264,9 @@ void Server::get_ready_to_read() {
 	/* rc == 0 */
 	else {
 		write_to_log(logfile_name, "Server-select() timed out.\n");
-		cout << "Error!! See " << logfile_name << endl;
+		buff.str("");
+		buff << " Error!! See " << logfile_name << "\n";
+		win->write(buff.str());
 		close(sd);
 		close(sd2);
 		exit(-1);
