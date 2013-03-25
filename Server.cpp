@@ -103,7 +103,9 @@ void Server::allow_socket() {
 		ostringstream buff;
 		buff << "Server-setsockopt() error: " << strerror(errno) << "\n";
 		write_to_log(logfile_name, buff.str());
-		cout << "Error!! See " << logfile_name << endl;
+		buff.str("");
+		buff << " Error!! See " << logfile_name << "\n";
+		win->write(buff.str());
 		close(sd);
 		exit (-1);
 	}
