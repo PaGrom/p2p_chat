@@ -129,7 +129,9 @@ void Server::bind_socket() {
 		ostringstream buff;
 		buff << "Server-bind() error: " << strerror(errno) << "\n";
 		write_to_log(logfile_name, buff.str());
-		cout << "Error!! See " << logfile_name << endl;
+		buff.str("");
+		buff << " Error!! See " << logfile_name << "\n";
+		win->write(buff.str());
 		/* Close the socket descriptor */
 		close(sd);
 		/* and just exit */
