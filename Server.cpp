@@ -82,7 +82,9 @@ void Server::create_socket() {
 		ostringstream buff;
 		buff << "Server-socket() error: " << strerror(errno) << "\n";
 		write_to_log(logfile_name, buff.str());
-		cout << "Error!! See " << logfile_name << endl;
+		buff.str("");
+		buff << " Error!! See " << logfile_name << "\n";
+		win->write(buff.str());
 		/* Just exit */
 		exit (-1);
 	}
