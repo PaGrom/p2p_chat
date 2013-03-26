@@ -202,6 +202,8 @@ void Server::get_ready_to_read() {
 	/***********************************************/
 	/* Wait for up to 15 seconds on */
 	/* select() for data to be read. */
+	write_to_log(logfile_name, "Server-Ready to read...\n");
+	
 	ostringstream buff;
 	timeout.tv_sec = 3600;
 	timeout.tv_usec = 0;
@@ -219,6 +221,7 @@ void Server::get_ready_to_read() {
 			/* client sent. */
 			/***********************************************/
 			/* read() from client */
+			write_to_log(logfile_name, "Server-Reading...\n");
 			rc = read(sd2, &buffer[totalcnt], (BufferLength - totalcnt));
 			if (rc < 0) {
 				buff << "Server-read() error: " << strerror(errno) << "\n";
