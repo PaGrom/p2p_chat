@@ -101,15 +101,16 @@ void Client::parse_command() {
 		create_socket();
 		get_host_address();
 		connect_to_server();
-	} else if (data.find("/exit") == 0) {
+		return;
+
+	if (data.find("/exit") == 0) {
 		close_connect();
 		exit(0);
 	}
-	else {
-		ostringstream buff;
-		buff << " Wrong command!\n";
-		output_win->write(buff.str());
-	}
+
+	ostringstream buff;
+	buff << " Wrong command!\n";
+	output_win->write(buff.str());
 }
 
 void Client::create_socket() {
@@ -157,8 +158,7 @@ void Client::get_host_address() {
 			buff.str("");
 			buff << " Error!! See " << logfile_name << "\n";
 			output_win->write(buff.str());
-			close(sd);
-			exit(-1);
+			close_connect();
 		}
 		memcpy(&serveraddr.sin_addr, hostp->h_addr, sizeof(serveraddr.sin_addr));
 	}
