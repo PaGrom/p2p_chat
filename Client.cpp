@@ -177,8 +177,7 @@ void Client::connect_to_server() {
 		buff.str("");
 		buff << " Error!! See " << logfile_name << "\n";
 		output_win->write(buff.str());
-		close(sd);
-		exit(-1);
+		close_connect();
 	}
 	else {
 		buff << " Connection with " << server << " established...\n";
@@ -214,8 +213,7 @@ void Client::write_to_server() {
 			buff << "SO_ERROR was: " << strerror(errno) << "\n";
 			write_to_log(logfile_name, buff.str());
 		}
-		close(sd);
-		exit(-1);
+		close_connect();
 	}
 	else {
 		write_to_log(logfile_name, "Client-write() is OK\n");
@@ -240,16 +238,14 @@ void Client::wait_server_echo_back() {
 			buff.str("");
 			buff << " Error!! See " << logfile_name << "\n";
 			output_win->write(buff.str());
-			close(sd);
-			exit(-1);
+			close_connect();
 		}
 		else if (rc == 0) {
 			write_to_log(logfile_name, "Server program has issued a close()\n");
 			buff.str("");
 			buff << " Error!! See " << logfile_name << "\n";
 			output_win->write(buff.str());
-			close(sd);
-			exit(-1);
+			close_connect();
 		}
 		else
 			totalcnt += rc;
