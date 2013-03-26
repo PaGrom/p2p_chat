@@ -231,24 +231,22 @@ void Client::wait_server_echo_back() {
 		/* Read data from the server. */
 		rc = read(sd, &buffer[totalcnt], BufferLength-totalcnt);
 
-		ostringstream buff;
-		if (rc < 0) {
-			buff << "Client-read() error: " << strerror(errno) << "\n";
-			write_to_log(logfile_name, buff.str());
-			buff.str("");
-			buff << " Error!! See " << logfile_name << "\n";
-			output_win->write(buff.str());
-			close_connect();
-		}
-		else if (rc == 0) {
-			write_to_log(logfile_name, "Server program has issued a close()\n");
-			buff.str("");
-			buff << " Error!! See " << logfile_name << "\n";
-			output_win->write(buff.str());
-			close_connect();
-		}
-		else
+		if (rc > 0)
 			totalcnt += rc;
+		else {
+			ostringstream buff;
+			buff << " Error!! See " << logfile_name << "\n";
+			output_win->write(buff.str());
+			close_connect();
+
+			if (rc < 0) {
+				buff.str("");
+				buff << "Client-read() error: " << strerror(errno) << "\n";
+				write_to_log(logfile_name, buff.str());
+			}
+			else
+				write_to_log(logfile_name, "Server program has issued a close()\n");
+		}
 	}
 
 	write_to_log(logfile_name, "Client-read() is OK\n");
