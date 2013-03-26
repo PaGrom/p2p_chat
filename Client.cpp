@@ -68,8 +68,8 @@ void Client::load_parameters() {
 
 void Client::run() {
 	write_to_log(logfile_name, "Start...\n");
+	
 	while (true) {
-
 		data = input_win->read();
 		ostringstream buff;
 		buff << " " << get_time() << " " << nickname << ": " << data;
@@ -102,7 +102,8 @@ void Client::parse_command() {
 		get_host_address();
 		connect_to_server();
 		return;
-
+	}
+	
 	if (data.find("/exit") == 0) {
 		close_connect();
 		exit(0);
