@@ -223,26 +223,8 @@ void Server::get_ready_to_read() {
 			/* read() from client */
 			write_to_log(logfile_name, "Server-Reading...\n");
 			rc = read(sd2, &buffer[totalcnt], (BufferLength - totalcnt));
-			if (rc < 0) {
-				buff << "Server-read() error: " << strerror(errno) << "\n";
-				write_to_log(logfile_name, buff.str());
-				buff.str("");
-				buff << " Error!! See " << logfile_name << "\n";
-				win->write(buff.str());
-				close(sd);
-				close(sd2);
-				exit (-1);
-			}
-			else if (rc == 0) {
-				write_to_log(logfile_name, "Client program has issued a close()\n");
-				buff.str("");
-				buff << " Error!! See " << logfile_name << "\n";
-				win->write(buff.str());
-				close(sd);
-				close(sd2);
-				exit(-1);
-			}
-			else {
+
+			if (rc > 0) {
 				totalcnt += rc;
 				write_to_log(logfile_name, "Server-read() is OK\n");
 				/* Shows the data */
@@ -250,23 +232,35 @@ void Server::get_ready_to_read() {
 				buff << " " << get_time() << " " << nickname << ": " << buffer;
 				win->write(buff.str());
 			}
+			else {
+				if (rc < 0) {
+					buff.str("");
+					buff << "Server-read() error: " << strerror(errno) << "\n";
+					write_to_log(logfile_name, buff.str());
+				}
+				if (rc == 0)
+					write_to_log(logfile_name, "Client program has issued a close()\n");
+
+				buff.str("");
+				buff << " Error!! See " << logfile_name << "\n";
+				win->write(buff.str());
+				close(sd);
+				close(sd2);
+				exit (-1);
+			}
 			 
 		}
 	}
-	else if (rc < 0) {
-		buff.str("");
-		buff << "Server-select() error: " << strerror(errno) << "\n";
-		write_to_log(logfile_name, buff.str());
-		buff.str("");
-		buff << " Error!! See " << logfile_name << "\n";
-		win->write(buff.str());
-		close(sd);
-		close(sd2);
-		exit(-1);
-	}
-	/* rc == 0 */
 	else {
-		write_to_log(logfile_name, "Server-select() timed out.\n");
+		if (rc < 0) {
+			buff.str("");
+			buff << "Server-select() error: " << strerror(errno) << "\n";
+			write_to_log(logfile_name, buff.str());
+		}
+
+		if (rc == 0)
+			write_to_log(logfile_name, "Server-select() timed out.\n");
+		
 		buff.str("");
 		buff << " Error!! See " << logfile_name << "\n";
 		win->write(buff.str());
