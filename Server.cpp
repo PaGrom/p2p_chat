@@ -106,8 +106,7 @@ void Server::allow_socket() {
 		buff.str("");
 		buff << " Error!! See " << logfile_name << "\n";
 		win->write(buff.str());
-		close(sd);
-		exit (-1);
+		close_connect();
 	}
 	else
 		write_to_log(logfile_name, "Server-setsockopt() is OK\n");
@@ -132,10 +131,7 @@ void Server::bind_socket() {
 		buff.str("");
 		buff << " Error!! See " << logfile_name << "\n";
 		win->write(buff.str());
-		/* Close the socket descriptor */
-		close(sd);
-		/* and just exit */
-		exit(-1);
+		close_connect();
 	}
 	else
 		write_to_log(logfile_name, "Server-bind() is OK\n");
@@ -156,8 +152,7 @@ void Server::get_ready() {
 		buff.str("");
 		buff << " Error!! See " << logfile_name << "\n";
 		win->write(buff.str());
-		close(sd);
-		exit (-1);
+		close_connect();
 	}
 	else
 		write_to_log(logfile_name, "Server-Ready for client connection...\n");
@@ -180,8 +175,7 @@ void Server::accept_socket() {
 		buff.str("");
 		buff << " Error!! See " << logfile_name << "\n";
 		win->write(buff.str());
-		close(sd);
-		exit(-1);
+		close_connect();
 	}
 	else
 		write_to_log(logfile_name, "Server-accept() is OK\n");
@@ -244,9 +238,7 @@ void Server::get_ready_to_read() {
 				buff.str("");
 				buff << " Error!! See " << logfile_name << "\n";
 				win->write(buff.str());
-				close(sd);
-				close(sd2);
-				exit (-1);
+				close_connect();
 			}
 			 
 		}
@@ -264,9 +256,7 @@ void Server::get_ready_to_read() {
 		buff.str("");
 		buff << " Error!! See " << logfile_name << "\n";
 		win->write(buff.str());
-		close(sd);
-		close(sd2);
-		exit(-1);
+		close_connect();
 	}
 }
 
@@ -302,9 +292,7 @@ void Server::write_to_client_back() {
 		else
 			write_to_log(logfile_name, "Server-write() is OK\n");
 		 
-		close(sd);
-		close(sd2);
-		exit(-1);
+		close_connect();
 	}
 }
 
