@@ -223,37 +223,6 @@ void Client::write_to_server() {
 	}
 }
 
-void Client::wait_server_echo_back() {
-
-	while (totalcnt < BufferLength) {
-		/* Wait for the server to echo the */
-		/* string by using the read() function. */
-		/***************************************/
-		/* Read data from the server. */
-		rc = read(sd, &buffer[totalcnt], BufferLength-totalcnt);
-
-		if (rc > 0)
-			totalcnt += rc;
-		else {
-			ostringstream buff;
-			buff << " Error!! See " << logfile_name << "\n";
-			output_win->write(buff.str());
-			close_connect();
-
-			if (rc < 0) {
-				buff.str("");
-				buff << "Client-read() error: " << strerror(errno) << "\n";
-				write_to_log(logfile_name, buff.str());
-			}
-			else
-				write_to_log(logfile_name, "Server program has issued a close()\n");
-		}
-	}
-
-	write_to_log(logfile_name, "Client-read() is OK\n");
-	memset(buffer, 0, sizeof(buffer));
-}
-
 void Client::close_connect() {
 	/* When the data has been read, close() */
 	/* the socket descriptor. */
