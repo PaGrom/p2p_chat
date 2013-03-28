@@ -62,10 +62,8 @@ void Server::run() {
 	get_ready();
 	accept_socket();
 	
-	while (true) {
+	while (true)
 		get_ready_to_read();
-		// write_to_client_back();
-	}
 	
 	close_connect();
 }
@@ -256,42 +254,6 @@ void Server::get_ready_to_read() {
 		buff.str("");
 		buff << " Error!! See " << logfile_name << "\n";
 		win->write(buff.str());
-		close_connect();
-	}
-}
-
-void Server::write_to_client_back() {
-	/* Echo some bytes of string, back */
-	/* to the client by using the write() */
-	/* function. */
-	/************************************/
-	/* write() some bytes of string, */
-	/* back to the client. */
-	write_to_log(logfile_name, "Server-Echoing back to client...\n");
-	rc = write(sd2, buffer, totalcnt);
-	if (rc != totalcnt) {
-		ostringstream buff;
-		buff << "Server-write() error: " << strerror(errno) << "\n";
-		write_to_log(logfile_name, buff.str());
-		buff.str("");
-		buff << " Error!! See " << logfile_name << "\n";
-		win->write(buff.str());
-		/* Get the error number. */
-		rc = getsockopt(sd2, SOL_SOCKET, SO_ERROR, &temp, &length);
-		if (rc == 0) {
-			/* Print out the asynchronously */
-			/* received error. */
-			errno = temp;
-			buff.str("");
-			buff << "SO_ERROR was: " << strerror(errno) << "\n";
-			write_to_log(logfile_name, buff.str());
-			buff.str("");
-			buff << " Error!! See " << logfile_name << "\n";
-			win->write(buff.str());
-		}
-		else
-			write_to_log(logfile_name, "Server-write() is OK\n");
-		 
 		close_connect();
 	}
 }
