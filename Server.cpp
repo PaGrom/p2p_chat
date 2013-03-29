@@ -35,7 +35,7 @@ void Server::load_parameters() {
 		buff << " Error!! See " << logfile_name << "\n";
 		win->write(buff.str());
 		/* Just exit */
-		exit (-1);
+		pthread_exit(0);
 	}
 
 	string line;
@@ -84,7 +84,7 @@ void Server::create_socket() {
 		buff << " Error!! See " << logfile_name << "\n";
 		win->write(buff.str());
 		/* Just exit */
-		exit (-1);
+		pthread_exit(0);
 	}
 	else
 		write_to_log(logfile_name, "Server-socket() is OK\n");
@@ -214,6 +214,7 @@ void Server::get_ready_to_read() {
 			/***********************************************/
 			/* read() from client */
 			write_to_log(logfile_name, "Server-Reading...\n");
+
 			rc = read(sd2, &buffer[totalcnt], (BufferLength - totalcnt));
 
 			if (rc > 0) {
@@ -223,6 +224,7 @@ void Server::get_ready_to_read() {
 				buff.str("");
 				buff << " " << get_time() << " " << nickname << ": " << buffer;
 				win->write(buff.str());
+				memset(buffer, 0, 100);
 			}
 			else {
 				if (rc < 0) {
@@ -269,5 +271,5 @@ void Server::close_connect() {
 	/******************************************/
 	close(sd2);
 	close(sd);
-	exit(0);
+	pthread_exit(0);
 }

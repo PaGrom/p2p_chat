@@ -47,7 +47,7 @@ void Client::load_parameters() {
 		buff << " Error!! See " << logfile_name << "\n";
 		output_win->write(buff.str());
 		/* Just exit */
-		exit(-1);
+		pthread_exit(0);
 	}
 
 	string line;
@@ -106,7 +106,7 @@ void Client::parse_command() {
 	
 	if (data.find("/exit") == 0) {
 		close_connect();
-		exit(0);
+		pthread_exit(0);
 	}
 
 	ostringstream buff;
@@ -130,7 +130,7 @@ void Client::create_socket() {
 		buff.str("");
 		buff << " Error!! See " << logfile_name << "\n";
 		output_win->write(buff.str());
-		exit(-1);
+		pthread_exit(0);
 	}
 	else
 		write_to_log(logfile_name, "Client-socket() OK\n");
@@ -228,8 +228,9 @@ void Client::close_connect() {
 	/* the socket descriptor. */
 	/****************************************/
 	/* Close socket descriptor from client side. */
+	write_to_log(logfile_name, "Client-Closing...\n");
 	close(sd);
-	exit(0);
+	pthread_exit(0);
 }
 
 string Client::get_server() {
