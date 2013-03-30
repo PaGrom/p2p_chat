@@ -198,24 +198,27 @@ void Client::write_to_server() {
 	char* dt = (char*)data.c_str();
 
 	rc = write(sd, dt, sizeof(dt));
-	 
-	if (rc < 0) {
-		ostringstream buff;
+	
+	ostringstream buff;
+
+	if (rc < 0) {	
 		buff << "Client-write() error: " << strerror(errno) << "\n";
 		write_to_log(logfile_name, buff.str());
 		buff.str("");
 		buff << " Error!! See " << logfile_name << "\n";
 		output_win->write(buff.str());
 		rc = getsockopt(sd, SOL_SOCKET, SO_ERROR, &temp, &length);
-		if (rc == 0) {
-			/* Print out the asynchronously received error. */
-			errno = temp;
-			buff.str("");
-			buff << "SO_ERROR was: " << strerror(errno) << "\n";
-			write_to_log(logfile_name, buff.str());
-		}
 		close_connect();
 	}
+
+	else if (rc == 0) {
+		/* Print out the asynchronously received error. */
+		errno = temp;
+		buff << "SO_ERROR was: " << strerror(errno) << "\n";
+		write_to_log(logfile_name, buff.str());
+		close_connect();
+	}
+
 	else {
 		write_to_log(logfile_name, "Client-write() is OK\n");
 		write_to_log(logfile_name, "String successfully sent!\n");
