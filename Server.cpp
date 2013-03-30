@@ -202,6 +202,7 @@ void Server::get_ready_to_read() {
 	FD_ZERO(&read_fd);
 	FD_SET(sd2, &read_fd);
 	rc = select(sd2+1, &read_fd, NULL, NULL, &timeout);
+
 	if ((rc == 1) && (FD_ISSET(sd2, &read_fd))) {
 		/* Read data from the client. */
 		totalcnt = 0;
@@ -224,40 +225,42 @@ void Server::get_ready_to_read() {
 				buff.str("");
 				buff << " " << get_time() << " " << nickname << ": " << buffer;
 				win->write(buff.str());
-				memset(buffer, 0, 100);
-			}
-			else {
-				if (rc < 0) {
-					buff.str("");
-					buff << "Server-read() error: " << strerror(errno) << "\n";
-					write_to_log(logfile_name, buff.str());
-				}
-				if (rc == 0)
-					write_to_log(logfile_name, "Client program has issued a close()\n");
 
+				continue;
+			}
+
+			if (rc < 0) {
 				buff.str("");
-				buff << " Error!! See " << logfile_name << "\n";
-				win->write(buff.str());
-				close_connect();
+				buff << "Server-read() error: " << strerror(errno) << "\n";
+				write_to_log(logfile_name, buff.str());
 			}
-			 
-		}
-	}
-	else {
-		if (rc < 0) {
+
+			if (rc == 0)
+				write_to_log(logfile_name, "Client program has issued a close()\n");
+
 			buff.str("");
-			buff << "Server-select() error: " << strerror(errno) << "\n";
-			write_to_log(logfile_name, buff.str());
+			buff << " Error!! See " << logfile_name << "\n";
+			win->write(buff.str());
+			close_connect();
 		}
 
-		if (rc == 0)
-			write_to_log(logfile_name, "Server-select() timed out.\n");
-		
-		buff.str("");
-		buff << " Error!! See " << logfile_name << "\n";
-		win->write(buff.str());
-		close_connect();
+		return;
 	}
+
+	if (rc < 0) {
+		buff.str("");
+		buff << "Server-select() error: " << strerror(errno) << "\n";
+		write_to_log(logfile_name, buff.str());
+	}
+
+	if (rc == 0)
+		write_to_log(logfile_name, "Server-select() timed out.\n");
+	
+	buff.str("");
+	buff << " Error!! See " << logfile_name << "\n";
+	win->write(buff.str());
+	close_connect();
+
 }
 
 void Server::close_connect() {
