@@ -1,7 +1,11 @@
 Simple P2P chat
 
 Dependecies:
+	Linux:
 	sudo apt-get install libncursesw5-dev
+
+	MacOS:
+	sudo port install ncurses
 
 Compile:
 	1. mkdir build
