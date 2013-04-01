@@ -109,6 +109,19 @@ void Client::parse_command() {
 		pthread_exit(0);
 	}
 
+	if (data.find("/help") == 0) {
+		ostringstream buff;
+		buff << "\t" << "/connect <ip>" << "\t" << " - connect to server";
+		output_win->write(buff.str());
+		buff.str("");
+		buff << "\t" << "/exit" << "\t" << " - close program";
+		output_win->write(buff.str());
+		buff.str("");
+		buff << "\t" << "/help" << "\t" << " - show this message";
+		output_win->write(buff.str());
+		return;
+	}
+
 	ostringstream buff;
 	buff << " Wrong command!\n";
 	output_win->write(buff.str());
