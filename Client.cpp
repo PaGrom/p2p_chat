@@ -93,6 +93,8 @@ void Client::run() {
 }
 
 void Client::parse_command() {
+
+	ostringstream buff;
 	
 	if (data.find("/connect") == 0) {
 		vector<string> vec = split(data);
@@ -105,7 +107,6 @@ void Client::parse_command() {
 	}
 
 	if (data.find("/nickname") == 0) {
-		ostringstream buff;
 		vector<string> vec = split(data);
 		if (vec.size() > 2) {
 			nickname = vec.at(1);
@@ -125,7 +126,7 @@ void Client::parse_command() {
 	}
 
 	if (data.find("/help") == 0) {
-		ostringstream buff;
+		
 		buff << "\t" << "/connect <ip>" << "\t" << " - connect to server";
 		output_win->write(buff.str());
 		buff.str("");
@@ -140,7 +141,6 @@ void Client::parse_command() {
 		return;
 	}
 
-	ostringstream buff;
 	buff << " Wrong command!\n";
 	output_win->write(buff.str());
 }
