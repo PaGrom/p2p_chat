@@ -100,6 +100,8 @@ void Client::parse_command() {
 		vector<string> vec = split(data);
 		if (vec.size() > 2)
 			server = vec.at(1);
+		if (sd)
+			close(sd);
 		create_socket();
 		get_host_address();
 		connect_to_server();
