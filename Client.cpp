@@ -103,6 +103,21 @@ void Client::parse_command() {
 		connect_to_server();
 		return;
 	}
+
+	if (data.find("/nickname") == 0) {
+		ostringstream buff;
+		vector<string> vec = split(data);
+		if (vec.size() > 2) {
+			nickname = vec.at(1);
+			buff << " Nickname was changed to " << nickname;
+			output_win->write(buff.str());
+		}
+		else {
+			buff << " Your nickname is " << nickname;
+			output_win->write(buff.str());
+		}
+		return;
+	}
 	
 	if (data.find("/exit") == 0) {
 		close_connect();
@@ -112,6 +127,9 @@ void Client::parse_command() {
 	if (data.find("/help") == 0) {
 		ostringstream buff;
 		buff << "\t" << "/connect <ip>" << "\t" << " - connect to server";
+		output_win->write(buff.str());
+		buff.str("");
+		buff << "\t" << "/nickname <new nickname>" << "\t" << " - change nickname";
 		output_win->write(buff.str());
 		buff.str("");
 		buff << "\t" << "/exit" << "\t" << " - close program";
