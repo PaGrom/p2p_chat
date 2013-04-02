@@ -77,6 +77,7 @@ public:
 	void connect_to_server();
 	void write_to_server();
 	void close_connect();
+	void quit();
 
 	string get_server();
 };

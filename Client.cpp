@@ -47,7 +47,7 @@ void Client::load_parameters() {
 		buff << " Error!! See " << logfile_name << "\n";
 		output_win->write(buff.str());
 		/* Just exit */
-		pthread_exit(0);
+		quit();
 	}
 
 	string line;
@@ -90,6 +90,7 @@ void Client::run() {
 	}
 
 	close_connect();
+	quit();
 }
 
 void Client::parse_command() {
@@ -101,7 +102,7 @@ void Client::parse_command() {
 		if (vec.size() > 2)
 			server = vec.at(1);
 		if (sd)
-			close(sd);
+			close_connect();
 		create_socket();
 		get_host_address();
 		connect_to_server();
@@ -124,7 +125,7 @@ void Client::parse_command() {
 	
 	if (data.find("/exit") == 0) {
 		close_connect();
-		pthread_exit(0);
+		quit();
 	}
 
 	if (data.find("/help") == 0) {
@@ -163,7 +164,6 @@ void Client::create_socket() {
 		buff.str("");
 		buff << " Error!! See " << logfile_name << "\n";
 		output_win->write(buff.str());
-		pthread_exit(0);
 	}
 	else
 		write_to_log(logfile_name, "Client-socket() OK\n");
@@ -193,6 +193,7 @@ void Client::get_host_address() {
 			buff << " Error!! See " << logfile_name << "\n";
 			output_win->write(buff.str());
 			close_connect();
+			quit();
 		}
 		memcpy(&serveraddr.sin_addr, hostp->h_addr, sizeof(serveraddr.sin_addr));
 	}
@@ -264,8 +265,12 @@ void Client::close_connect() {
 	/* the socket descriptor. */
 	/****************************************/
 	/* Close socket descriptor from client side. */
-	write_to_log(logfile_name, "Client-Closing...\n");
+	write_to_log(logfile_name, "Client-Closing connect...\n");
 	close(sd);
+}
+
+void Client::quit() {
+	write_to_log(logfile_name, "Client-Quiting...\n");
 	pthread_exit(0);
 }
 
