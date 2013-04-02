@@ -82,11 +82,8 @@ void Client::run() {
 		
 		if (sd)
 			write_to_server();
-		else {
-			buff.str("");
-			buff << " Warning! Not connected!\n";
-			output_win->write(buff.str());
-		}
+		else
+			output_win->write(" Warning! Not connected!\n");
 	}
 
 	close_connect();
@@ -144,8 +141,7 @@ void Client::parse_command() {
 		return;
 	}
 
-	buff << " Wrong command!\n";
-	output_win->write(buff.str());
+	output_win->write(" Wrong command!\n");
 }
 
 void Client::create_socket() {
@@ -193,7 +189,6 @@ void Client::get_host_address() {
 			buff << " Error!! See " << logfile_name << "\n";
 			output_win->write(buff.str());
 			close_connect();
-			quit();
 		}
 		memcpy(&serveraddr.sin_addr, hostp->h_addr, sizeof(serveraddr.sin_addr));
 	}
@@ -256,7 +251,6 @@ void Client::write_to_server() {
 	else {
 		write_to_log(logfile_name, "Client-write() is OK\n");
 		write_to_log(logfile_name, "String successfully sent!\n");
-		write_to_log(logfile_name, "Waiting the server to echo back...\n");
 	}
 }
 
