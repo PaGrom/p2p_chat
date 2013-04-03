@@ -62,6 +62,7 @@ public:
 	void accept_socket();
 	void get_ready_to_read();
 	void close_connect();
+	void quit();
 };
 
 #endif

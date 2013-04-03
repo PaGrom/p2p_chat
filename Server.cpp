@@ -35,7 +35,7 @@ void Server::load_parameters() {
 		buff << " Error!! See " << logfile_name << "\n";
 		win->write(buff.str());
 		/* Just exit */
-		pthread_exit(0);
+		quit();
 	}
 
 	string line;
@@ -66,6 +66,7 @@ void Server::run() {
 		get_ready_to_read();
 	
 	close_connect();
+	quit();
 }
 
 void Server::create_socket() {
@@ -84,7 +85,7 @@ void Server::create_socket() {
 		buff << " Error!! See " << logfile_name << "\n";
 		win->write(buff.str());
 		/* Just exit */
-		pthread_exit(0);
+		quit();
 	}
 	else
 		write_to_log(logfile_name, "Server-socket() is OK\n");
@@ -105,6 +106,7 @@ void Server::allow_socket() {
 		buff << " Error!! See " << logfile_name << "\n";
 		win->write(buff.str());
 		close_connect();
+		quit();
 	}
 	else
 		write_to_log(logfile_name, "Server-setsockopt() is OK\n");
@@ -130,6 +132,7 @@ void Server::bind_socket() {
 		buff << " Error!! See " << logfile_name << "\n";
 		win->write(buff.str());
 		close_connect();
+		quit();
 	}
 	else
 		write_to_log(logfile_name, "Server-bind() is OK\n");
@@ -151,6 +154,7 @@ void Server::get_ready() {
 		buff << " Error!! See " << logfile_name << "\n";
 		win->write(buff.str());
 		close_connect();
+		quit();
 	}
 	else
 		write_to_log(logfile_name, "Server-Ready for client connection...\n");
@@ -174,6 +178,7 @@ void Server::accept_socket() {
 		buff << " Error!! See " << logfile_name << "\n";
 		win->write(buff.str());
 		close_connect();
+		quit();
 	}
 	else
 		write_to_log(logfile_name, "Server-accept() is OK\n");
@@ -242,6 +247,7 @@ void Server::get_ready_to_read() {
 			buff << " Error!! See " << logfile_name << "\n";
 			win->write(buff.str());
 			close_connect();
+			quit();
 		}
 
 		return;
@@ -260,7 +266,7 @@ void Server::get_ready_to_read() {
 	buff << " Error!! See " << logfile_name << "\n";
 	win->write(buff.str());
 	close_connect();
-
+	quit();
 }
 
 void Server::close_connect() {
@@ -272,7 +278,12 @@ void Server::close_connect() {
 	/* Close the connection to the client and */
 	/* close the server listening socket. */
 	/******************************************/
+	write_to_log(logfile_name, "Server-Closing connect...\n");
 	close(sd2);
 	close(sd);
+}
+
+void Server::quit() {
+	write_to_log(logfile_name, "Server-Quiting...\n");
 	pthread_exit(0);
 }
