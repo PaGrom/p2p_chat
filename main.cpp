@@ -25,6 +25,8 @@ int main(int argc, char const *argv[]) {
 	noecho();
 	keypad(stdscr, TRUE);
 
+	signal(SIGWINCH, NULL); // not crash when terminal resized
+
 	int ymax, xmax, height;
 	getmaxyx(stdscr, ymax, xmax);
 
@@ -84,7 +86,10 @@ int main(int argc, char const *argv[]) {
 	pthread_join(t_client, &t_client_status);
 	pthread_join(t_server, &t_server_status);
 
-	endwin();
+	delete input;
+	delete output;
 
+	endwin();
+	
 	return 0;
 }
