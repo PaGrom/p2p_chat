@@ -13,6 +13,7 @@
 #include <unistd.h>
 #include <iostream>
 #include <sstream>
+#include <signal.h>
 
 #include "funcs.hpp"
 #include "Window.hpp"

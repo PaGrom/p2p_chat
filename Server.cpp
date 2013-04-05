@@ -285,5 +285,5 @@ void Server::close_connect() {
 
 void Server::quit() {
 	write_to_log(logfile_name, "Server-Quiting...\n");
-	pthread_exit(0);
+	raise(SIGINT); // CTRL + C
 }
