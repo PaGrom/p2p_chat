@@ -31,7 +31,7 @@ private:
 	int totalcnt;
 	int on;
 	char temp;
-	char buffer[100];
+	
 	struct sockaddr_in serveraddr;
 	struct sockaddr_in their_addr;
 	 
