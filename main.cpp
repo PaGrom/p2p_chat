@@ -59,8 +59,6 @@ int main(int argc, char const *argv[]) {
 	pthread_sigmask(SIG_BLOCK, &sigset, &oldset);
 	
 	pthread_t t_client, t_server;
-	void* t_client_status;
-	void* t_server_status;
 
 	// Spawn the two threads
 	pthread_create(&t_server, NULL, &run_server, (void*)server);
@@ -82,9 +80,6 @@ int main(int argc, char const *argv[]) {
 
 	pthread_cancel(t_client);
 	pthread_cancel(t_server);
-
-	pthread_join(t_client, &t_client_status);
-	pthread_join(t_server, &t_server_status);
 
 	delete input;
 	delete output;
