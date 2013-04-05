@@ -11,6 +11,7 @@
 #include <netdb.h>
 #include <unistd.h>
 #include <errno.h>
+#include <signal.h>
 
 #include <string>
 #include <iostream>

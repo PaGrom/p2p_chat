@@ -265,7 +265,7 @@ void Client::close_connect() {
 
 void Client::quit() {
 	write_to_log(logfile_name, "Client-Quiting...\n");
-	pthread_exit(0);
+	raise(SIGINT); // CTRL + C
 }
 
 string Client::get_server() {
