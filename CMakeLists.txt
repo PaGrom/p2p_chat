@@ -22,9 +22,9 @@ add_library(funcs STATIC ${FUNCS})
 
 add_executable(p2p_chat ${SOURCE_EXE})
 
-SET(CURSES_NEED_NCURSES TRUE)
-FIND_PACKAGE(Curses)
+set(CURSES_NEED_NCURSES TRUE)
+find_package(Curses)
 
 find_package(Threads)
 
-target_link_libraries(p2p_chat window server client funcs ${CMAKE_THREAD_LIBS_INIT} -lncursesw)
+target_link_libraries(p2p_chat window server client funcs ${CMAKE_THREAD_LIBS_INIT} -lncurses)
