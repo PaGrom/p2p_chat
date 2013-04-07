@@ -233,7 +233,7 @@ void Server::get_ready_to_read() {
 				buff << " " << get_time() << " " << nickname << ": " << buffer;
 				win->write(buff.str());
 
-				return;
+				continue;
 			}
 
 			if (rc < 0) {
@@ -287,5 +287,5 @@ void Server::close_connect() {
 
 void Server::quit() {
 	write_to_log(logfile_name, "Server-Quiting...\n");
-	raise(SIGINT); // CTRL + C
+	kill(getpid(), SIGINT); // CTRL + C
 }

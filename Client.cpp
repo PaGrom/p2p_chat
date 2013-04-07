@@ -70,6 +70,8 @@ void Client::run() {
 	write_to_log(logfile_name, "Start...\n");
 	
 	while (true) {
+		output_win->refresh_win();
+		input_win->refresh_win();
 		data = input_win->read();
 		ostringstream buff;
 		buff << " " << get_time() << " " << nickname << ": " << data;
@@ -265,7 +267,8 @@ void Client::close_connect() {
 
 void Client::quit() {
 	write_to_log(logfile_name, "Client-Quiting...\n");
-	raise(SIGINT); // CTRL + C
+	// raise(SIGINT); // CTRL + C
+	kill(getpid(), SIGINT);
 }
 
 string Client::get_server() {
