@@ -21,6 +21,7 @@ public:
 	~Window();
 
 	void refresh_win();
+	void resize_win(int nlines, int ncols);
 	string read();
 	void write(string line);
 };

@@ -16,6 +16,10 @@ void Window::refresh_win() {
 	wrefresh(win);
 }
 
+void Window::resize_win(int nlines, int ncols) {
+	wresize(win, nlines, ncols);
+}
+
 string Window::read() {
 	int c = 0;
 	int pos = 0;
