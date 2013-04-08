@@ -51,16 +51,10 @@ int main(int argc, char const *argv[]) {
 	Window *output = new Window("output", ymax - 5, xmax, 0, 0);
 	Window *input = new Window("input", 5, xmax, ymax - 5, 0);
 
-	// output->refresh_win();
-	// input->refresh_win();
-
 	memset(&wins, 0, sizeof(wins));
 
 	wins.outwin = output;
 	wins.inwin = input;
-
-	// wins->set_outwin(output);
-	// wins->set_inwin(input);
 
 	signal(SIGWINCH, resize_wins); // not crash when terminal resized
 
@@ -89,7 +83,6 @@ int main(int argc, char const *argv[]) {
 	pthread_t t_client, t_server, t_refresh;
 
 	// Spawn the threads
-	// pthread_create(&t_refresh, NULL, &refresh_wins, (void*)wins);
 	pthread_create(&t_server, NULL, &run_server, (void*)server);
 	sleep(1);
 	pthread_create(&t_client, NULL, &run_client, (void*)client);
@@ -107,7 +100,6 @@ int main(int argc, char const *argv[]) {
     // Wait for SIGINT to arrive
     pause();
 
-    // pthread_cancel(t_refresh);
 	pthread_cancel(t_client);
 	pthread_cancel(t_server);
 
