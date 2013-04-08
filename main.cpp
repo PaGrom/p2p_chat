@@ -4,6 +4,13 @@
 #include "Client.hpp"
 #include "Server.hpp"
 
+typedef struct {
+	Window* inwin;
+	Window* outwin;
+}  wins_t;
+
+wins_t wins;
+
 void sigint(int signo) {
     (void)signo;
 }
@@ -18,6 +25,19 @@ void* run_server(void* par) {
 	server->run();
 }
 
+void resize_wins(int sig_number) {
+	int ymax, xmax, height;
+	getmaxyx(stdscr, ymax, xmax);
+
+	wins.outwin->resize_win(ymax - 5, xmax);
+	wins.inwin->resize_win(5, xmax);
+
+	wins.outwin->refresh_win();
+	wins.inwin->refresh_win();
+
+	return;
+}
+
 int main(int argc, char const *argv[]) {
 	setlocale(LC_ALL, "");
 	initscr();
@@ -25,16 +45,18 @@ int main(int argc, char const *argv[]) {
 	noecho();
 	keypad(stdscr, TRUE);
 
-	signal(SIGWINCH, NULL); // not crash when terminal resized
-
 	int ymax, xmax, height;
 	getmaxyx(stdscr, ymax, xmax);
 
 	Window *output = new Window("output", ymax - 5, xmax, 0, 0);
 	Window *input = new Window("input", 5, xmax, ymax - 5, 0);
 
-	output->refresh_win();
-	input->refresh_win();
+	memset(&wins, 0, sizeof(wins));
+
+	wins.outwin = output;
+	wins.inwin = input;
+
+	signal(SIGWINCH, resize_wins); // not crash when terminal resized
 
 	/*If the server hostname is supplied*/
 	Client* client;
@@ -58,9 +80,9 @@ int main(int argc, char const *argv[]) {
 	sigaddset(&sigset, SIGINT);
 	pthread_sigmask(SIG_BLOCK, &sigset, &oldset);
 	
-	pthread_t t_client, t_server;
+	pthread_t t_client, t_server, t_refresh;
 
-	// Spawn the two threads
+	// Spawn the threads
 	pthread_create(&t_server, NULL, &run_server, (void*)server);
 	sleep(1);
 	pthread_create(&t_client, NULL, &run_client, (void*)client);
