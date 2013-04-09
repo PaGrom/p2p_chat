@@ -5,11 +5,11 @@ Dependecies:
 	sudo apt-get install libncursesw5-dev
 
 	MacOS:
-	sudo port install ncurses
+	sudo port install ncurses +universal
 
 Compile:
 	1. mkdir build
 	2. cd build
 	3. cmake ../
 	4. make
-	5. ./p2p_chat <ip>
+	5. ./p2p_chat
