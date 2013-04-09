@@ -12,7 +12,7 @@ typedef struct {
 wins_t wins;
 
 void sigint(int signo) {
-    (void)signo;
+	(void)signo;
 }
 
 void* run_client(void* par) {
@@ -68,9 +68,9 @@ int main(int argc, char const *argv[]) {
 
 	/*Not crash when terminal resized*/
 	struct sigaction sa;
-    memset(&sa, 0, sizeof(struct sigaction));
-    sa.sa_handler = resize_wins;
-    sigaction(SIGWINCH, &sa, NULL);
+	memset(&sa, 0, sizeof(struct sigaction));
+	sa.sa_handler = resize_wins;
+	sigaction(SIGWINCH, &sa, NULL);
 
 	/*If the server hostname is supplied*/
 	Client* client;
@@ -88,7 +88,7 @@ int main(int argc, char const *argv[]) {
 	server->get_window(output);
 
 	// Block the SIGINT signal. The threads will inherit the signal mask
-    // This will avoid them catching SIGINT instead of this thread
+	// This will avoid them catching SIGINT instead of this thread
 	sigset_t sigset, oldset;
 	sigemptyset(&sigset);
 	sigaddset(&sigset, SIGINT);
@@ -102,17 +102,17 @@ int main(int argc, char const *argv[]) {
 	pthread_create(&t_client, NULL, &run_client, (void*)client);
 
 	// Install the signal handler for SIGINT
-    struct sigaction s;
-    s.sa_handler = sigint;
-    sigemptyset(&s.sa_mask);
-    s.sa_flags = 0;
-    sigaction(SIGINT, &s, NULL);
+	struct sigaction s;
+	s.sa_handler = sigint;
+	sigemptyset(&s.sa_mask);
+	s.sa_flags = 0;
+	sigaction(SIGINT, &s, NULL);
 
-    // Restore the old signal mask only for this thread
-    pthread_sigmask(SIG_SETMASK, &oldset, NULL);
+	// Restore the old signal mask only for this thread
+	pthread_sigmask(SIG_SETMASK, &oldset, NULL);
 
-    // Wait for SIGINT to arrive
-    pause();
+	// Wait for SIGINT to arrive
+	pause();
 
 	pthread_cancel(t_client);
 	pthread_cancel(t_server);
