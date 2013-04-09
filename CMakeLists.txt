@@ -2,6 +2,10 @@ cmake_minimum_required(VERSION 2.8)
 
 project(p2p_chat)
 
+set(CMAKE_BUILD_TYPE Debug)
+
+set( main.cpp)
+
 set(SOURCE_EXE main.cpp)
 
 set(WINDOW Window.cpp)
