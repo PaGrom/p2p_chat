@@ -26,6 +26,14 @@ void* run_server(void* par) {
 }
 
 void resize_wins(int sig_number) {
+
+	signal(SIGWINCH, SIG_IGN);
+
+	endwin();
+	initscr();
+	refresh();
+	clear();
+
 	int ymax, xmax, height;
 	getmaxyx(stdscr, ymax, xmax);
 
@@ -35,7 +43,9 @@ void resize_wins(int sig_number) {
 	wins.outwin->refresh_win();
 	wins.inwin->refresh_win();
 
-	return;
+	refresh();
+
+	signal(SIGWINCH, resize_wins);
 }
 
 int main(int argc, char const *argv[]) {
@@ -56,7 +66,11 @@ int main(int argc, char const *argv[]) {
 	wins.outwin = output;
 	wins.inwin = input;
 
-	signal(SIGWINCH, resize_wins); // not crash when terminal resized
+	/*Not crash when terminal resized*/
+	struct sigaction sa;
+    memset(&sa, 0, sizeof(struct sigaction));
+    sa.sa_handler = resize_wins;
+    sigaction(SIGWINCH, &sa, NULL);
 
 	/*If the server hostname is supplied*/
 	Client* client;
