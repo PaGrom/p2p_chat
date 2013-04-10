@@ -41,7 +41,8 @@ private:
 	int rc;
 	unsigned int length;
 	struct sockaddr_in serveraddr;
-	char buffer[100];
+	// char buffer[100];
+	char *buffer;
 	char temp;
 	int totalcnt;
 	struct hostent *hostp;

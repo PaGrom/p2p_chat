@@ -3,6 +3,8 @@
 void Client::CommonInit() {
 	BufferLength = 100;
 
+	buffer = new char[BufferLength];
+
 	totalcnt = 0;
 
 	logfile_name = "client.log";
