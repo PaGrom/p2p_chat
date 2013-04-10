@@ -94,7 +94,7 @@ int main(int argc, char const *argv[]) {
 	sigaddset(&sigset, SIGINT);
 	pthread_sigmask(SIG_BLOCK, &sigset, &oldset);
 	
-	pthread_t t_client, t_server, t_refresh;
+	pthread_t t_client, t_server;
 
 	// Spawn the threads
 	pthread_create(&t_server, NULL, &run_server, (void*)server);
