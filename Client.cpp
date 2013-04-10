@@ -224,9 +224,11 @@ void Client::write_to_server() {
 	write_to_log(logfile_name, "Client-Writing...\n");
 	sleep(1); //wait server
 
-	char* dt = (char*)data.c_str();
+	char *dt = new char[data.length() + 1];
 
-	rc = write(sd, dt, sizeof(dt));
+	strcpy(dt, data.c_str());
+
+	rc = write(sd, dt, data.length());
 	
 	ostringstream buff;
 

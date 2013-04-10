@@ -222,6 +222,7 @@ void Server::get_ready_to_read() {
 			write_to_log(logfile_name, "Server-Reading...\n");
 
 			char buffer[100];
+			bzero(buffer, 100);
 
 			rc = read(sd2, &buffer[totalcnt], (BufferLength - totalcnt));
 
@@ -233,7 +234,7 @@ void Server::get_ready_to_read() {
 				buff << " " << get_time() << " " << nickname << ": " << buffer;
 				win->write(buff.str());
 
-				continue;
+				return;
 			}
 
 			if (rc < 0) {
