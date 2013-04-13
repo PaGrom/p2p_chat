@@ -25,19 +25,12 @@ string Window::read() {
 	int pos = 0;
 	string input = "";
 
-	curs_set(2);
-
 	while (c != '\n') {
 		c = getch();
 		if (c == KEY_BACKSPACE) {
-			noecho();  
-			nocbreak();
-			int x, y;
-			getyx(win, y, x);
-			move(y, x - 1);
-			delch(); 
-			cbreak();  
-			refresh();
+			mvwdelch(win, 1, pos--);
+			input = input.substr(0, input.size()-1);
+			refresh_win();
 			continue;
 		}
 		if (c == '\n' || (c > 31 && c < 126)) {
