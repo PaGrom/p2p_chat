@@ -23,6 +23,7 @@ void Window::resize_win(int nlines, int ncols) {
 string Window::read() {
 	int c = 0;
 	int pos = 0;
+	int moves = 0; //moves to left
 	string input = "";
 
 	while (c != '\n') {
@@ -33,6 +34,23 @@ string Window::read() {
 			refresh_win();
 			continue;
 		}
+
+		if (c == KEY_LEFT) {
+			wmove(win, 1, pos--);
+			moves++;
+			refresh_win();
+			continue;
+		}
+
+		if (c == KEY_RIGHT) {
+			if (moves != 0) {
+				wmove(win, 1, pos++);
+				moves--;
+				refresh_win();
+			}
+			continue;
+		}
+
 		if (c == '\n' || (c > 31 && c < 126)) {
 			mvwaddch(win, 1, ++pos, c);
 			input += c;
